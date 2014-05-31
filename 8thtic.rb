@@ -30,7 +30,7 @@ class TicTacToe
   def conduct_game
      prompt
      user_turn_choice
-     assign_opponent_piece
+     assign_cpu_piece
      initiate_first_player_move # this may not be nessecary
      print_board
   end
@@ -59,7 +59,7 @@ class TicTacToe
     end
   end
 
-  def assign_opponent_piece
+  def assign_cpu_piece
     if user == 'X'
       self.cpu = 'O'
     else
@@ -92,9 +92,9 @@ class TicTacToe
   end
 
 
-  def caluclute_times_in_victory_scenario(scenario, piece)
+  def caluclute_piece_occurance_in_victory_scenario(victory_scenario, piece)
   times = 0
-    scenario.each do |i|
+    victory_scenario.each do |i|
       times += 1 if board_spaces[i] == piece
       unless board_spaces[i] == piece || board_spaces[i] == " "
         #oppisite piece is in column so column cannot be used for win.
@@ -105,7 +105,13 @@ class TicTacToe
     times
   end
 
-
+  def find_empty_spaces_in_victory_scenario(victory_scenario)
+    victory_scenario.each do |i|
+      if board_spaces[i] == " "
+        return i
+      end
+    end
+  end
 end
 
 TicTacToe.new
