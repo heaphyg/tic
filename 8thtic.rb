@@ -1,10 +1,14 @@
+# rename turn_choice user ??
+
 class TicTacToe
   attr_reader :user_name
-  attr_accessor :turn_choice, :opponent_piece, :board_spaces
+  attr_accessor :user, :cpu, :opponent_piece, :board_spaces 
   def initialize
-    @turn_choice = nil
     @opponent_piece = nil
-    @board_spaces = {     # defining all 9 board spaces and setting them as unoccupied with empty strings
+    @user = nil
+    @cpu = nil
+
+    @board_spaces = { 
       1 => "1",2 => "2",3 => "3",
       4 => "4",5 => "5",6 => "6",
       7 => "7",8 => "8",9 => "9"
@@ -27,7 +31,7 @@ class TicTacToe
      prompt
      user_turn_choice
      assign_opponent_piece
-     turn # this may not be nessecary
+     initiate_first_player_move # this may not be nessecary
      print_board
   end
 
@@ -40,38 +44,34 @@ class TicTacToe
   def user_turn_choice
     proper_piece_selection = false
     until proper_piece_selection
-      if !['X', 'O'].include?(turn_choice)
+      if !['X', 'O'].include?(user)
         puts "please write an 'X' if you would like to go first or an 'O' if you would like to go second"
-        self.turn_choice = gets.chomp.upcase
-      elsif turn_choice  == 'X'
+        self.user = gets.chomp.upcase  
+      elsif user  == 'X'
         puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
         proper_piece_selection = true
-        player1 = user_name
-        player2 = "Computer"
-        # turn_choice  # im concerned that this could be DRYer
+        self.cpu = 'O'
       else
         puts "#{user_name} you have chosen to go second. Bold move."
         proper_piece_selection = true
-        player1 = "Computer"
-        player2 = user_name
-        # turn_choice # we may not even need these here
+        self.cpu = 'X'
       end
     end
   end
 
   def assign_opponent_piece
-    if turn_choice == 'X'
-      self.opponent_piece = 'O'
+    if user == 'X'
+      self.cpu = 'O'
     else
-      self.opponent_piece = 'X'
+      self.cpu = 'X'
     end
   end
 
-  def turn
-    if turn_choice == 'X'
+  def initiate_first_player_move
+    if user == 'X'
       # user_turn
     else
-      # opponent_turn
+      # cpu_turn
     end
   end
 
@@ -83,11 +83,29 @@ class TicTacToe
     puts "                    #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}"
   end
 
-  def opponent_turn
-    move = opponenet_determine_move  # this method will eventually choose the best move to make if there is a best move
-    board_spaces[move] = opponent_piece
-    check_game()
+
+  def cpu_turn
+    move = cpu_find_move
+    self.board_spaces[move] = cpu
+    # put_line
+    check_game(user)
   end
+
+
+  def caluclute_times_in_victory_scenario(scenario, piece)
+  times = 0
+    scenario.each do |i|
+      times += 1 if board_spaces[i] == piece
+      unless board_spaces[i] == piece || board_spaces[i] == " "
+        #oppisite piece is in column so column cannot be used for win.
+        #therefore, the strategic thing to do is choose a dif column so return 0.
+        return 0
+      end
+    end
+    times
+  end
+
+
 end
 
 TicTacToe.new
