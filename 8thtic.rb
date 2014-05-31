@@ -60,6 +60,14 @@ class TicTacToe
       opponent_piece = 'X'
     end
   end
+
+  def turn
+    if turn_choice == 'X'
+      user_turn
+    else
+      opponent_turn
+    end
+  end
 end
 
 TicTacToe.new
