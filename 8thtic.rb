@@ -27,6 +27,7 @@ class TicTacToe
      prompt
      user_turn_choice
      assign_opponent_piece
+     puts opponent_piece
   end
 
   def prompt
@@ -48,16 +49,16 @@ class TicTacToe
       else
         puts "#{user_name} you have chosen to go second. Bold move."
         proper_piece_selection = true
-        turn_choice
+        turn_choice # we may not even need these here
       end
     end
   end
 
   def assign_opponent_piece
     if turn_choice == 'X'
-      opponent_piece = 'O'
+      self.opponent_piece = 'O'
     else
-      opponent_piece = 'X'
+      self.opponent_piece = 'X'
     end
   end
 
