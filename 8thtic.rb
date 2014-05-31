@@ -1,5 +1,4 @@
 class TicTacToe
-  class TicTacToe
   attr_reader :user_name
   attr_accessor :turn_choice, :opponent_piece, :board_spaces
   def initialize
@@ -26,6 +25,8 @@ class TicTacToe
 
   def conduct_game
      prompt
+     user_turn_choice
+     assign_opponent_piece
   end
 
   def prompt
@@ -34,4 +35,31 @@ class TicTacToe
     @user_name = gets.chomp.capitalize #is it bad that I use an instance var here
   end
 
+  def user_turn_choice
+    proper_piece_selection = false
+    until proper_piece_selection
+      if !['X', 'O'].include?(turn_choice)
+        puts "please write an 'X' if you would like to go first or an 'O' if you would like to go second"
+        self.turn_choice = gets.chomp.upcase
+      elsif turn_choice  == 'X'
+        puts "Excellent #{user_name}. You have chosen to go first. Take your turn."
+        proper_piece_selection = true
+        turn_choice  # im concerned that this could be DRYer
+      else
+        puts "#{user_name} you have chosen to go second. Bold move."
+        proper_piece_selection = true
+        turn_choice
+      end
+    end
+  end
+
+  def assign_opponent_piece
+    if turn_choice == 'X'
+      opponent_piece = 'O'
+    else
+      opponent_piece = 'X'
+    end
+  end
 end
+
+TicTacToe.new
