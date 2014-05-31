@@ -27,7 +27,7 @@ class TicTacToe
      prompt
      user_turn_choice
      assign_opponent_piece
-     puts opponent_piece
+     print_board
   end
 
   def prompt
@@ -68,6 +68,14 @@ class TicTacToe
     else
       opponent_turn
     end
+  end
+
+  def print_board  ## perhaps the board should have numbers printed in it..
+    puts " 1 #{board_spaces[1]}|#{board_spaces[2]}|#{board_spaces[3]}"
+    puts "   -----"
+    puts " 2 #{board_spaces[4]}|#{board_spaces[5]}|#{board_spaces[6]}"
+    puts "   -----"
+    puts " 3 #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}"
   end
 end
 
