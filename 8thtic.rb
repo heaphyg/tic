@@ -4,12 +4,12 @@
 # do the sleeper ... stuf for computer's move
 class TicTacToe
   attr_reader :potential_victory_scenarios
-  attr_accessor :user, :cpu, :opponent_piece, :board_spaces, :user_name 
+  attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
   def initialize
-    @user_name
+    @user_name = nil
     @opponent_piece = nil
-    @user = nil
-    @cpu = nil
+    @user_piece = nil
+    @cpu_piece = nil
 
     @board_spaces = { 
       1 => " ",2 => " ",3 => " ",
@@ -47,31 +47,33 @@ class TicTacToe
   def user_turn_choice
     proper_piece_selection = false
     until proper_piece_selection
-      if !['X', 'O'].include?(user)
+      if !['X', 'O'].include?(user_piece)
         puts "#{user_name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
-        self.user = gets.chomp.upcase  
-      elsif user  == 'X'
+        self.user_piece = gets.chomp.upcase  
+      elsif user_piece  == 'X'
+        border
         puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
         proper_piece_selection = true
-        self.cpu = 'O'
+        self.cpu_piece = 'O'
       else
+        border
         puts "#{user_name} you have chosen to go second. Bold move."
         proper_piece_selection = true
-        self.cpu = 'X'
+        self.cpu_piece = 'X'
       end
     end
   end
 
   def assign_cpu_piece
-    if user == 'X'
-      self.cpu = 'O'
+    if user_piece == 'X'
+      self.cpu_piece = 'O'
     else
-      self.cpu = 'X'
+      self.cpu_piece = 'X'
     end
   end
 
   def initiate_first_player_move
-    if user == 'X'
+    if user_piece == 'X'
       user_turn
     else
       cpu_turn
@@ -96,9 +98,8 @@ class TicTacToe
 
   def cpu_turn
     move = cpu_find_move
-    self.board_spaces[move] = cpu
-    # put_line
-    check_game(user)
+    self.board_spaces[move] = cpu_piece
+    check_game(user_piece)
   end
 
 
@@ -126,13 +127,13 @@ class TicTacToe
   def cpu_find_move
     # calculate potential winning move
     potential_victory_scenarios.each do |victory_scenario|
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 2
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 2
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
     # calculate potential defensive block
     potential_victory_scenarios.each do |victory_scenario|
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, user) == 2
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, user_piece) == 2
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
@@ -142,7 +143,7 @@ class TicTacToe
     end
     # build up a victory scenario
     potential_victory_scenarios.each do |victory_scenario|
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 1
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 1
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
@@ -158,13 +159,13 @@ class TicTacToe
 
   def user_turn
     print_board
-    # STDOUT.flush
-    input = gets.chomp  # we need to make the game doesnt break if the user type in a non integer
-    if input.to_i.class == Fixnum
+    input = gets.chomp
+    # if input.to_i.class == Fixnum
+    if (1..9).include?(input.to_i)
       input = input.to_i
       if board_spaces[input] == " "
-        board_spaces[input] = user
-        check_game(cpu)
+        board_spaces[input] = user_piece
+        check_game(cpu_piece)
       else
         wrong_move
       end
@@ -180,31 +181,32 @@ class TicTacToe
 
   def incorrect_input
     puts "Please specify a move with an integer 1..9"
+    user_turn
   end
 
   def check_game(next_turn)
     game_over = nil
     potential_victory_scenarios.each do |scenario|
-      if caluclute_piece_occurance_in_victory_scenario(scenario, cpu) == 3
-        # put_line
+      if caluclute_piece_occurance_in_victory_scenario(scenario, cpu_piece) == 3
+        border
         puts "!!!!!!!!!!!!!!CPU WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if caluclute_piece_occurance_in_victory_scenario(scenario, user) == 3
-        # put_line
+      if caluclute_piece_occurance_in_victory_scenario(scenario, user_piece) == 3
+        border
         puts "!!!!!!!!!!!!!!#{@user_name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
     end
     unless game_over
       if(board_spaces_left > 0)
-        if(next_turn == @user)
+        if(next_turn == user_piece)
           user_turn
         else
           cpu_turn
         end
       else
-        # put_line
+        border
         puts "!!!!!!!!!!!!!!DRAW!!!!!!!!!!!!!!"
       end
     end
