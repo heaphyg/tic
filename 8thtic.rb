@@ -1,4 +1,5 @@
 # break down stuff in check_game and cpu_find_move into methods??
+# make it so that 
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
@@ -114,22 +115,29 @@ class TicTacToe
   end
 
   def find_empty_spaces_in_victory_scenario(victory_scenario)
-    victory_scenario.each do |i|
+    possible_moves = []
+    victory_scenario.each do |i|  
       if board_spaces[i] == " "
-        return i
+        # return i
+        possible_moves << i
       end
     end
+    puts "possible_moves:"
+    puts possible_moves
+    possible_moves.sample
   end
 
   def cpu_find_move
     # calculate potential winning move
     potential_victory_scenarios.each do |victory_scenario|
+      puts "winning move"
       if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 2
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
     # calculate potential defensive block
     potential_victory_scenarios.each do |victory_scenario|
+      puts "defensive block"
       if caluclute_piece_occurance_in_victory_scenario(victory_scenario, user_piece) == 2
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
@@ -138,7 +146,13 @@ class TicTacToe
     if (board_spaces[1] != " " || board_spaces[3] != " " || board_spaces[7] != " " || board_spaces[9] != " ") && (board_spaces[5] == " ")
         return 5  
     end
-    # build up a victory scenario
+    #if player1 starts in middle - cpu has to move to a corner
+    if (board_spaces[5] != " ") && (board_spaces[1] == " " && board_spaces[3] == " " && board_spaces[7] == " " && board_spaces[9] == " ")
+      puts "middle logic"
+      return [1,3,7,9].sample
+    end
+    # build up _saa victory scenario
+    puts "building up"
     potential_victory_scenarios.each do |victory_scenario|
       if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 1
         return find_empty_spaces_in_victory_scenario(victory_scenario)
