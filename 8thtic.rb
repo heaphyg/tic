@@ -112,6 +112,14 @@ class TicTacToe
       end
     end
   end
+
+  def cpu_find_move
+    potential_victory_scenarios.each do |victory_scenario|
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 2
+        return find_empty_spaces_in_victory_scenario(victory_scenario)
+      end
+    end
+  end
 end
 
 TicTacToe.new
