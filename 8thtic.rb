@@ -152,18 +152,13 @@ class TicTacToe
   end
 
   def user_turn
-    # put_line
     print_board
     # STDOUT.flush
-    # input = gets.chomp.downcase  # A1 B2 etc.
     input = gets.chomp  # we need to make the game doesnt break if the user type in a non integer
-    # put_bar
-
     if input.to_i.class == Fixnum
+      input = input.to_i
       if board_spaces[input] == " "
         board_spaces[input] = user
-        # put_line
-        puts "#{@user_name} marks #{input.upcase}"
         check_game(cpu)
       else
         wrong_move
