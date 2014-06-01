@@ -114,11 +114,25 @@ class TicTacToe
   end
 
   def cpu_find_move
+    # calculate potential winning move
     potential_victory_scenarios.each do |victory_scenario|
       if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 2
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
+    # calculate potential defensive block
+    potential_victory_scenarios.each do |victory_scenario|
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, user) == 2
+        return find_empty_spaces_in_victory_scenario(victory_scenario)
+      end
+    end
+    # build up a victory scenario
+    potential_victory_scenarios.each do |victory_scenario|
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 1
+        return find_empty_spaces_in_victory_scenario(victory_scenario)
+      end
+    end
+
   end
 end
 
