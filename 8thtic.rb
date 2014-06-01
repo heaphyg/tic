@@ -9,9 +9,9 @@ class TicTacToe
     @cpu = nil
 
     @board_spaces = { 
-      1 => "1",2 => "2",3 => "3",
-      4 => "4",5 => "5",6 => "6",
-      7 => "7",8 => "8",9 => "9"
+      1 => " ",2 => " ",3 => " ",
+      4 => " ",5 => " ",6 => " ",
+      7 => " ",8 => " ",9 => " "
     }
 
     @potential_victory_scenarios = [
@@ -71,15 +71,15 @@ class TicTacToe
     if user == 'X'
       # user_turn
     else
-      # cpu_turn
+      cpu_turn
     end
   end
 
   def print_board  ## perhaps the board should have numbers printed in it..
     puts "                    #{board_spaces[1]}|#{board_spaces[2]}|#{board_spaces[3]}"
-    puts "                    -----"
+    puts "                   -------"
     puts "                    #{board_spaces[4]}|#{board_spaces[5]}|#{board_spaces[6]}"
-    puts "                    -----"
+    puts "                   -------"
     puts "                    #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}"
   end
 
@@ -140,6 +140,63 @@ class TicTacToe
     else
       board_space.each { |space,value| return space if value == " " }
     end
+  end
+
+  def user_turn
+    # put_line
+    puts " RUBY TIC TAC TOE"
+    print_board
+    puts " #{@user_name}, please make a move."
+    # STDOUT.flush
+    # input = gets.chomp.downcase  # A1 B2 etc.
+    input = gets.chomp  # we need to make the game doesnt break if the user type in a non integer
+    # put_bar
+
+    if input.to_i.class == Fixnum
+      if board_spaces[input] == " "
+        board_spaces[input] = user
+        # put_line
+        puts "#{@user_name} marks #{input.upcase}"
+        check_game(cpu)
+      else
+        wrong_move
+      end
+    else
+      incorrect_input
+    end
+
+    def wrong_move
+      puts "You must choose an empty space."
+      user_turn
+    end
+
+    def incorrect_input
+      puts "Please specify a move with an integer 1..9"
+    end
+
+
+
+    # if input.length == 2
+    #   a = input.split("")
+    #   if(['a','b','c'].include? a[0])
+    #     if(['1','2','3'].include? a[1])
+    #       if @places[input] == " "
+    #         @places[input] = @user
+    #         put_line
+    #         puts "#{@user_name} marks #{input.upcase}"
+    #         check_game(@cpu)
+    #       else
+    #         wrong_move
+    #       end
+    #     else
+    #       wrong_input
+    #     end
+    #   else
+    #     wrong_input
+    #   end
+    # else
+    #   wrong_input unless input == 'exit'
+    # end
   end
 end
 
