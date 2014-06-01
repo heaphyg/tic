@@ -152,7 +152,7 @@ class TicTacToe
     if board_spaces[key_collection[i]] == " "
       return key_collection[i]
     else
-      board_space.each { |space,value| return space if value == " " }
+      board_spaces.each { |space,value| return space if value == " " }
     end
   end
 
@@ -187,12 +187,12 @@ class TicTacToe
     potential_victory_scenarios.each do |scenario|
       if caluclute_piece_occurance_in_victory_scenario(scenario, cpu) == 3
         # put_line
-        puts "CPU wins!"
+        puts "!!!!!!!!!!!!!!CPU WINS!!!!!!!!!!!!!!"
         game_over = true
       end
       if caluclute_piece_occurance_in_victory_scenario(scenario, user) == 3
         # put_line
-        puts "#{@user_name} wins!"
+        puts "!!!!!!!!!!!!!!#{@user_name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
     end
@@ -205,7 +205,7 @@ class TicTacToe
         end
       else
         # put_line
-        puts "Game Over -- DRAW!"
+        puts "!!!!!!!!!!!!!!DRAW!!!!!!!!!!!!!!"
       end
     end
   end
