@@ -132,7 +132,14 @@ class TicTacToe
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
-
+    # random selection
+    key_collection = board_spaces.keys;
+    i = rand(key_collection.length)
+    if board_spaces[key_collection[i]] == " "
+      return key_collection[i]
+    else
+      board_space.each { |space,value| return space if value == " " }
+    end
   end
 end
 
