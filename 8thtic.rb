@@ -1,6 +1,4 @@
 # break down stuff in check_game and cpu_find_move into methods??
-
-
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
@@ -159,7 +157,6 @@ class TicTacToe
   def user_turn
     print_board
     input = gets.chomp
-    # if input.to_i.class == Fixnum
     if (1..9).include?(input.to_i)
       input = input.to_i
       if board_spaces[input] == " "
@@ -193,7 +190,7 @@ class TicTacToe
       end
       if caluclute_piece_occurance_in_victory_scenario(scenario, user_piece) == 3
         border
-        puts "!!!!!!!!!!!!!!#{@user_name} WINS!!!!!!!!!!!!!!"
+        puts "!!!!!!!!!!!!!!#{user_name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
     end
