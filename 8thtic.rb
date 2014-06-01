@@ -1,7 +1,6 @@
-# change cpu to cpu_piece and user to user_piece
 # break down stuff in check_game and cpu_find_move into methods??
-# make sure the user can't type a non integer as a value..
-# do the sleeper ... stuf for computer's move
+
+
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
@@ -27,21 +26,21 @@ class TicTacToe
       [1,5,9], # 2 potential diagonal victories
       [3,5,7]
     ]
-    conduct_game
+    start_game
   end
 
-  def conduct_game
+  def start_game
      prompt
      user_turn_choice
      assign_cpu_piece
-     initiate_first_player_move # this may not be nessecary
+     initiate_first_player_move
      print_board
   end
 
   def prompt
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
-    self.user_name = gets.chomp.capitalize #is it bad that I use an instance var here
+    self.user_name = gets.chomp.capitalize
   end
 
   def user_turn_choice
