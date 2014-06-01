@@ -2,9 +2,10 @@
 # break down stuff in check_game and cpu_find_move into methods??
 
 class TicTacToe
-  attr_reader :user_name, :potential_victory_scenarios
-  attr_accessor :user, :cpu, :opponent_piece, :board_spaces 
+  attr_reader :potential_victory_scenarios
+  attr_accessor :user, :cpu, :opponent_piece, :board_spaces, :user_name 
   def initialize
+    @user_name
     @opponent_piece = nil
     @user = nil
     @cpu = nil
@@ -39,14 +40,14 @@ class TicTacToe
   def prompt
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
-    @user_name = gets.chomp.capitalize #is it bad that I use an instance var here
+    self.user_name = gets.chomp.capitalize #is it bad that I use an instance var here
   end
 
   def user_turn_choice
     proper_piece_selection = false
     until proper_piece_selection
       if !['X', 'O'].include?(user)
-        puts "please write an 'X' if you would like to go first or an 'O' if you would like to go second"
+        puts "#{user_name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
         self.user = gets.chomp.upcase  
       elsif user  == 'X'
         puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
@@ -70,18 +71,25 @@ class TicTacToe
 
   def initiate_first_player_move
     if user == 'X'
-      # user_turn
+      user_turn
     else
       cpu_turn
     end
   end
 
-  def print_board  ## perhaps the board should have numbers printed in it..
-    puts "                    #{board_spaces[1]}|#{board_spaces[2]}|#{board_spaces[3]}"
+  def border
+    puts "*************************************************************************"
+  end
+
+  def print_board 
+    border
+    puts "                Gameplay Board        Reference Board"
+    puts "                    #{board_spaces[1]}|#{board_spaces[2]}|#{board_spaces[3]}         *        1|2|3"
     puts "                   -------"
-    puts "                    #{board_spaces[4]}|#{board_spaces[5]}|#{board_spaces[6]}"
+    puts "                    #{board_spaces[4]}|#{board_spaces[5]}|#{board_spaces[6]}         *        4|5|6"
     puts "                   -------"
-    puts "                    #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}"
+    puts "                    #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}         *        7|8|9"
+    border
   end
 
 
@@ -145,9 +153,7 @@ class TicTacToe
 
   def user_turn
     # put_line
-    puts " RUBY TIC TAC TOE"
     print_board
-    puts " #{@user_name}, please make a move."
     # STDOUT.flush
     # input = gets.chomp.downcase  # A1 B2 etc.
     input = gets.chomp  # we need to make the game doesnt break if the user type in a non integer
