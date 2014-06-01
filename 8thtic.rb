@@ -1,7 +1,8 @@
-# rename turn_choice user ??
+# change cpu to cpu_piece and user to user_piece
+# break down stuff in check_game and cpu_find_move into methods??
 
 class TicTacToe
-  attr_reader :user_name
+  attr_reader :user_name, :potential_victory_scenarios
   attr_accessor :user, :cpu, :opponent_piece, :board_spaces 
   def initialize
     @opponent_piece = nil
@@ -164,39 +165,43 @@ class TicTacToe
     else
       incorrect_input
     end
+  end
 
-    def wrong_move
-      puts "You must choose an empty space."
-      user_turn
+  def wrong_move
+    puts "You must choose an empty space"
+    user_turn
+  end
+
+  def incorrect_input
+    puts "Please specify a move with an integer 1..9"
+  end
+
+  def check_game(next_turn)
+    game_over = nil
+    potential_victory_scenarios.each do |scenario|
+      if caluclute_piece_occurance_in_victory_scenario(scenario, cpu) == 3
+        # put_line
+        puts "#{@cpu_name} wins!"
+        game_over = true
+      end
+      if caluclute_piece_occurance_in_victory_scenario(scenario, user) == 3
+        # put_line
+        puts "#{@user_name} wins!"
+        game_over = true
+      end
     end
-
-    def incorrect_input
-      puts "Please specify a move with an integer 1..9"
+    unless game_over
+      if(moves_left > 0)
+        if(next_turn == @user)
+          user_turn
+        else
+          cpu_turn
+        end
+      else
+        # put_line
+        puts "Game Over -- DRAW!"
+      end
     end
-
-
-
-    # if input.length == 2
-    #   a = input.split("")
-    #   if(['a','b','c'].include? a[0])
-    #     if(['1','2','3'].include? a[1])
-    #       if @places[input] == " "
-    #         @places[input] = @user
-    #         put_line
-    #         puts "#{@user_name} marks #{input.upcase}"
-    #         check_game(@cpu)
-    #       else
-    #         wrong_move
-    #       end
-    #     else
-    #       wrong_input
-    #     end
-    #   else
-    #     wrong_input
-    #   end
-    # else
-    #   wrong_input unless input == 'exit'
-    # end
   end
 end
 
