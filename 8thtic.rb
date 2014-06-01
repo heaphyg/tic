@@ -1,6 +1,7 @@
 # change cpu to cpu_piece and user to user_piece
 # break down stuff in check_game and cpu_find_move into methods??
-
+# make sure the user can't type a non integer as a value..
+# do the sleeper ... stuf for computer's move
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user, :cpu, :opponent_piece, :board_spaces, :user_name 
@@ -135,6 +136,10 @@ class TicTacToe
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
+    # if player one starts in corner - move to middle
+    if (board_spaces[1] != " " || board_spaces[3] != " " || board_spaces[7] != " " || board_spaces[9] != " ") && (board_spaces[5] == " ")
+        return 5  
+    end
     # build up a victory scenario
     potential_victory_scenarios.each do |victory_scenario|
       if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu) == 1
@@ -182,7 +187,7 @@ class TicTacToe
     potential_victory_scenarios.each do |scenario|
       if caluclute_piece_occurance_in_victory_scenario(scenario, cpu) == 3
         # put_line
-        puts "#{@cpu_name} wins!"
+        puts "CPU wins!"
         game_over = true
       end
       if caluclute_piece_occurance_in_victory_scenario(scenario, user) == 3
