@@ -191,7 +191,7 @@ class TicTacToe
       end
     end
     unless game_over
-      if(moves_left > 0)
+      if(board_spaces_left > 0)
         if(next_turn == @user)
           user_turn
         else
@@ -202,6 +202,14 @@ class TicTacToe
         puts "Game Over -- DRAW!"
       end
     end
+  end
+
+  def board_spaces_left
+    spaces_left = 0
+    board_spaces.each do |k, v|
+      spaces_left += 1 if v == " "
+    end
+  spaces_left
   end
 end
 
