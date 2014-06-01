@@ -1,5 +1,4 @@
 # break down stuff in check_game and cpu_find_move into methods??
-# make it so that 
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
@@ -231,4 +230,6 @@ class TicTacToe
   end
 end
 
-TicTacToe.new
+if __FILE__ ==$0
+  TicTacToe.new
+end
