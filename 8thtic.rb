@@ -27,7 +27,6 @@ class TicTacToe
   def start_game
      prompt
      user_turn_choice
-     assign_cpu_piece
      initiate_first_player_move
      print_board
   end
@@ -58,13 +57,6 @@ class TicTacToe
     end
   end
 
-  def assign_cpu_piece
-    if user_piece == 'X'
-      self.cpu_piece = 'O'
-    else
-      self.cpu_piece = 'X'
-    end
-  end
 
   def initiate_first_player_move
     if user_piece == 'X'
