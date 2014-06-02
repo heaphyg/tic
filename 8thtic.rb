@@ -56,13 +56,9 @@ class TicTacToe
       end
     end
   end
-
+ 
   def initiate_first_player_move
-    if user_piece == 'X'
-      user_turn
-    else
-      cpu_turn
-    end
+    user_piece == 'X' ? user_turn : cpu_turn
   end
 
   def border
