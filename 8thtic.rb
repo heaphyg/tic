@@ -1,12 +1,12 @@
 class TicTacToe
   def initialize
-  #User class
+  # User class
     @user_name = nil
     @user_piece = nil 
-  #CPU class
+  # CPU class
     @cpu_piece = nil
 
-#Board class
+# Board class
     @board_spaces = { 
       1 => " ",2 => " ",3 => " ",
       4 => " ",5 => " ",6 => " ",
@@ -25,7 +25,7 @@ class TicTacToe
     ]
   end
 
-# Game class method
+# Tic Tac Toe class method
   def start_game
      prompt
      user_turn_choice
@@ -41,7 +41,7 @@ class TicTacToe
     return user_name
   end
 
-# Player class method
+# User class method
   def user_turn_choice
     proper_piece_selection = false
     until proper_piece_selection
@@ -62,7 +62,7 @@ class TicTacToe
     end
   end
  
- # Player class method
+ # User class method
   def initiate_first_player_move
     user_piece == 'X' ? user_turn : cpu_turn
   end
@@ -245,7 +245,7 @@ class TicTacToe
     board_spaces.each do |k, v|
       spaces_left += 1 if v == " "
     end
-  spaces_left
+    spaces_left
   end
 
 
