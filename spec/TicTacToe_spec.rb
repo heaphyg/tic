@@ -3,8 +3,14 @@ require_relative 'spec_helper'
 
 describe "TicTacToe" do
   context "when initiling a TicTacToe object" do
-    it 'does something special' do
+    it '..............' do
       # tic_tac_toe = TicTacToe.new
+    end
+  end
+  context "when prompt is called" do
+    it "displays a prompt to the user" do
+      tic_tac_toe = TicTacToe.new
+      expect(tic_tac_toe.prompt).to eq(user_name)
     end
   end
 end

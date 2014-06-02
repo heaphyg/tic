@@ -1,4 +1,6 @@
 # break down stuff in check_game and cpu_find_move into methods??
+# fix the calculute mispelling
+require 'byebug'
 class TicTacToe
   attr_reader :potential_victory_scenarios
   attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
@@ -126,38 +128,40 @@ class TicTacToe
     possible_moves.sample
   end
 
-  def cpu_find_move
-    # calculate potential winning move
+  def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |victory_scenario|
-      puts "winning move"
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 2
+      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, piece_to_be_counted) == num_of_occurances
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
-    # calculate potential defensive block
-    potential_victory_scenarios.each do |victory_scenario|
-      puts "defensive block"
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, user_piece) == 2
-        return find_empty_spaces_in_victory_scenario(victory_scenario)
-      end
-    end
-    # if player one starts in corner - move to middle
+    false
+  end
+
+  def seek_victory
+    calculate_move(cpu_piece, 2)
+  end
+
+  def block_victory
+    calculate_move(user_piece, 2)
+  end
+
+  def middle_defense
     if (board_spaces[1] != " " || board_spaces[3] != " " || board_spaces[7] != " " || board_spaces[9] != " ") && (board_spaces[5] == " ")
-        return 5  
+      return 5  
     end
-    #if player1 starts in middle - cpu has to move to a corner
+  end
+
+  def corner_defense
     if (board_spaces[5] != " ") && (board_spaces[1] == " " && board_spaces[3] == " " && board_spaces[7] == " " && board_spaces[9] == " ")
-      puts "middle logic"
       return [1,3,7,9].sample
     end
-    # build up _saa victory scenario
-    puts "building up"
-    potential_victory_scenarios.each do |victory_scenario|
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, cpu_piece) == 1
-        return find_empty_spaces_in_victory_scenario(victory_scenario)
-      end
-    end
-    # random selection
+  end
+
+  def build_up_a_victory_scenario
+    calculate_move(cpu_piece, 1)
+  end
+
+  def select_random_location
     key_collection = board_spaces.keys;
     i = rand(key_collection.length)
     if board_spaces[key_collection[i]] == " "
@@ -165,6 +169,10 @@ class TicTacToe
     else
       board_spaces.each { |space,value| return space if value == " " }
     end
+  end
+
+  def cpu_find_move
+    seek_victory ||  block_victory || middle_defense || corner_defense || build_up_a_victory_scenario || select_random_location
   end
 
   def user_turn
