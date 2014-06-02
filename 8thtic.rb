@@ -57,7 +57,6 @@ class TicTacToe
     end
   end
 
-
   def initiate_first_player_move
     if user_piece == 'X'
       user_turn
@@ -89,7 +88,7 @@ class TicTacToe
   end
 
 
-  def caluclute_piece_occurance_in_victory_scenario(victory_scenario, piece)
+  def calculate_piece_occurance_in_victory_scenario(victory_scenario, piece)
   times = 0
     victory_scenario.each do |i|
       times += 1 if board_spaces[i] == piece
@@ -114,7 +113,7 @@ class TicTacToe
 
   def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |victory_scenario|
-      if caluclute_piece_occurance_in_victory_scenario(victory_scenario, piece_to_be_counted) == num_of_occurances
+      if calculate_piece_occurance_in_victory_scenario(victory_scenario, piece_to_be_counted) == num_of_occurances
         return find_empty_spaces_in_victory_scenario(victory_scenario)
       end
     end
@@ -188,12 +187,12 @@ class TicTacToe
   def check_game(next_turn)
     game_over = nil
     potential_victory_scenarios.each do |scenario|
-      if caluclute_piece_occurance_in_victory_scenario(scenario, cpu_piece) == 3
+      if calculate_piece_occurance_in_victory_scenario(scenario, cpu_piece) == 3
         border
         puts "!!!!!!!!!!!!!!CPU WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if caluclute_piece_occurance_in_victory_scenario(scenario, user_piece) == 3
+      if calculate_piece_occurance_in_victory_scenario(scenario, user_piece) == 3
         border
         puts "!!!!!!!!!!!!!!#{user_name} WINS!!!!!!!!!!!!!!"
         game_over = true
