@@ -1,11 +1,7 @@
 # break down stuff in check_game and cpu_find_move into methods??
-# fix the calculute mispelling
-require 'byebug'
 class TicTacToe
-  attr_reader :potential_victory_scenarios
-  attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
   def initialize
-    @user_name = nil
+    @user_name = nil 
     @opponent_piece = nil
     @user_piece = nil
     @cpu_piece = nil
@@ -97,7 +93,7 @@ class TicTacToe
 
   def cpu_turn
     move = cpu_find_move
-    self.board_spaces[move] = cpu_piece
+    board_spaces[move] = cpu_piece
     check_game(user_piece)
   end
 
@@ -107,7 +103,7 @@ class TicTacToe
     victory_scenario.each do |i|
       times += 1 if board_spaces[i] == piece
       unless board_spaces[i] == piece || board_spaces[i] == " "
-        #oppisite piece is in column so column cannot be used for win.
+        #opposite piece is in column so column cannot be used for win.
         #therefore, the strategic thing to do is choose a dif column so return 0.
         return 0
       end
@@ -119,12 +115,9 @@ class TicTacToe
     possible_moves = []
     victory_scenario.each do |i|  
       if board_spaces[i] == " "
-        # return i
         possible_moves << i
       end
     end
-    puts "possible_moves:"
-    puts possible_moves
     possible_moves.sample
   end
 
@@ -236,6 +229,12 @@ class TicTacToe
     end
   spaces_left
   end
+
+
+  private
+
+  attr_reader :potential_victory_scenarios
+  attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
 end
 
 if __FILE__ ==$0
