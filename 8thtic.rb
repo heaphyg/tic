@@ -1,16 +1,18 @@
 class TicTacToe
   def initialize
-    @user_name = nil 
-    @opponent_piece = nil
-    @user_piece = nil
+  #User class
+    @user_name = nil
+    @user_piece = nil 
+  #CPU class
     @cpu_piece = nil
 
+#Board class
     @board_spaces = { 
       1 => " ",2 => " ",3 => " ",
       4 => " ",5 => " ",6 => " ",
       7 => " ",8 => " ",9 => " "
     }
-
+# Board class
     @potential_victory_scenarios = [
       [1,2,3], # 3 potential horizontal victories
       [4,5,6], 
@@ -23,6 +25,7 @@ class TicTacToe
     ]
   end
 
+# Game class method
   def start_game
      prompt
      user_turn_choice
@@ -30,7 +33,7 @@ class TicTacToe
      print_board
   end
 
-# view stuff
+# view 
   def prompt
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -38,6 +41,7 @@ class TicTacToe
     return user_name
   end
 
+# Player class method
   def user_turn_choice
     proper_piece_selection = false
     until proper_piece_selection
@@ -58,10 +62,12 @@ class TicTacToe
     end
   end
  
+ # Player class method
   def initiate_first_player_move
     user_piece == 'X' ? user_turn : cpu_turn
   end
 
+#view
   def border
     puts "*************************************************************************"
   end
@@ -79,14 +85,14 @@ class TicTacToe
     border
   end
 
-
+# CPU class method
   def cpu_turn
     move = cpu_find_move
     board_spaces[move] = cpu_piece
     check_game(user_piece)
   end
 
-
+# CPU class method
   def calculate_piece_occurance_in_victory_scenario(victory_scenario, piece)
     times = 0
     victory_scenario.each do |i|
@@ -100,6 +106,7 @@ class TicTacToe
     times
   end
 
+# CPU class method
   def find_empty_spaces_in_victory_scenario(victory_scenario)
     possible_moves = []
     victory_scenario.each do |i|  
@@ -111,6 +118,7 @@ class TicTacToe
     possible_moves.sample
   end
 
+# CPU class method
   def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |victory_scenario|
       if calculate_piece_occurance_in_victory_scenario(victory_scenario, piece_to_be_counted) == num_of_occurances
@@ -120,16 +128,19 @@ class TicTacToe
     false
   end
 
+# CPU class method
   def seek_victory
     puts "seek victory"
     calculate_move(cpu_piece, 2)
   end
 
+# CPU class method
   def block_victory
     puts "block victory"
     calculate_move(user_piece, 2)
   end
 
+# CPU class method
   def middle_defense
     puts "middle defense"
     if (board_spaces[1] != " " || board_spaces[3] != " " || board_spaces[7] != " " || board_spaces[9] != " ") && (board_spaces[5] == " ")
@@ -138,6 +149,7 @@ class TicTacToe
     false
   end
 
+# CPU class method
   def corner_defense
     puts "corner defense"
     if (board_spaces[5] != " ") && (board_spaces[1] == " " && board_spaces[3] == " " && board_spaces[7] == " " && board_spaces[9] == " ")
@@ -146,11 +158,13 @@ class TicTacToe
     false
   end
 
+# CPU class method
   def build_up_a_victory_scenario
     puts "build up"
     calculate_move(cpu_piece, 1)
   end
 
+# CPU class method
   def select_random_location
     puts "random selection"
     key_collection = board_spaces.keys;
@@ -162,10 +176,12 @@ class TicTacToe
     end
   end
 
+# CPU class method
   def cpu_find_move
     seek_victory ||  block_victory || middle_defense || corner_defense || build_up_a_victory_scenario || select_random_location
   end
 
+# User class method
   def user_turn
     print_board
     input = gets.chomp
@@ -182,16 +198,19 @@ class TicTacToe
     end
   end
 
+# User class method
   def wrong_move
     puts "You must choose an empty space"
     user_turn
   end
 
+# User class method
   def incorrect_input
     puts "Please specify a move with an integer 1..9"
     user_turn
   end
 
+# Tic Tac Toe class method
   def check_game(next_turn)
     game_over = nil
     potential_victory_scenarios.each do |scenario|
@@ -220,6 +239,7 @@ class TicTacToe
     end
   end
 
+# Tic Tac Toe class method
   def board_spaces_left
     spaces_left = 0
     board_spaces.each do |k, v|
@@ -230,9 +250,9 @@ class TicTacToe
 
 
   private
-
+# move these to the appropriate classes
   attr_reader :potential_victory_scenarios
-  attr_accessor :user_piece, :cpu_piece, :opponent_piece, :board_spaces, :user_name 
+  attr_accessor :user_piece, :cpu_piece, :board_spaces, :user_name 
 end
 
 if __FILE__ ==$0
