@@ -8,9 +8,11 @@ describe "TicTacToe" do
     end
   end
   context "when prompt is called" do
-    it "displays a prompt to the user" do
+    it "it displays the user's name" do
+      $stdin = StringIO.new("Kevin\n")
       tic_tac_toe = TicTacToe.new
-      expect(tic_tac_toe.prompt).to eq(user_name)
+      expect(tic_tac_toe.prompt).to eq("Kevin")
+      $stdin = STDIN
     end
   end
 end
