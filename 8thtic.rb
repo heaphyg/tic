@@ -22,7 +22,6 @@ class TicTacToe
       [1,5,9], # 2 potential diagonal victories
       [3,5,7]
     ]
-    start_game
   end
 
   def start_game
@@ -238,5 +237,5 @@ class TicTacToe
 end
 
 if __FILE__ ==$0
-  TicTacToe.new
+  TicTacToe.new.start_game
 end
