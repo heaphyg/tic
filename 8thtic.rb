@@ -27,7 +27,7 @@ class TicTacToe
 
 # Tic Tac Toe class method
   def start_game
-     prompt
+     self.user_name = prompt
      user_turn_choice
      initiate_first_player_move
      print_board
@@ -37,8 +37,7 @@ class TicTacToe
   def prompt
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
-    self.user_name = gets.chomp.capitalize
-    return user_name
+    return gets.chomp.capitalize
   end
 
 # User class method
