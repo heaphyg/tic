@@ -26,19 +26,34 @@ class User < Player
   end
 end
 
+class Board
+  def initialize
+     @board_spaces = { 
+      1 => " ",2 => " ",3 => " ",
+      4 => " ",5 => " ",6 => " ",
+      7 => " ",8 => " ",9 => " "
+    }
+
+    @potential_victory_scenarios = [
+      [1,2,3], # 3 potential horizontal victories
+      [4,5,6], 
+      [7,8,9],
+      [1,4,7], # 3 potential vertical victories
+      [2,5,8],
+      [3,6,9],
+      [1,5,9], # 2 potential diagonal victories
+      [3,5,7]
+    ]
+  end
+end
+
 
 class TicTacToe
   def initialize
-   ###################
-   @cpu = CPU.new
-   @user = User.new
+    @cpu = CPU.new
+    @user = User.new
 
 
-   ################### 
-  # User class
-    @user_name = nil
-    @user_piece = nil 
-  # CPU class
  
 
 # Board class
@@ -64,16 +79,16 @@ class TicTacToe
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
-    self.user_name = get_user_name
-    self.user_piece = get_user_piece
-    if user_piece == 'X'
+    user.name = get_user_name
+    user.piece = get_user_piece
+    if user.piece == 'X'
       border
-      puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
+      puts "Excellent #{user.name}. You have chosen to go first. Please select the number of the space you wish to occupy."
     else
       border
-      puts "#{user_name} you have chosen to go second. Bold move. Please select the number of the space you wish to occupy."
+      puts "#{user.name} you have chosen to go second. Bold move. Please select the number of the space you wish to occupy."
     end
-    cpu.piece = get_cpu_piece(user_piece)
+    cpu.piece = get_cpu_piece(user.piece)
     initiate_first_player_move
     print_board
   end
@@ -86,7 +101,7 @@ class TicTacToe
   def get_user_piece
     selection = nil
     until ['X','O'].include?(selection)
-      puts "#{user_name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
+      puts "#{user.name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
       selection = gets.chomp.upcase
     end
     selection
@@ -98,7 +113,7 @@ class TicTacToe
  
  # User class method
   def initiate_first_player_move
-    user_piece == 'X' ? user_turn : cpu_turn
+    user.piece == 'X' ? user_turn : cpu_turn
   end
 
 #view
@@ -123,7 +138,7 @@ class TicTacToe
   def cpu_turn
     move = cpu_find_move
     board_spaces[move] = cpu.piece
-    check_game(user_piece)
+    check_game(user.piece)
   end
 
   def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
@@ -159,7 +174,7 @@ class TicTacToe
 # CPU class method
   def block_victory
     puts "block victory"
-    calculate_move(user_piece, 2)
+    calculate_move(user.piece, 2)
   end
 
   # CPU class method
@@ -214,7 +229,7 @@ class TicTacToe
     if (1..9).include?(input.to_i)
       input = input.to_i
       if board_spaces[input] == " "
-        board_spaces[input] = user_piece
+        board_spaces[input] = user.piece
         check_game(cpu.piece)
       else
         wrong_move
@@ -245,15 +260,15 @@ class TicTacToe
         puts "!!!!!!!!!!!!!!#{cpu.name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if piece_count_for_scenario(scenario, user_piece) == 3
+      if piece_count_for_scenario(scenario, user.piece) == 3
         border
-        puts "!!!!!!!!!!!!!!#{user_name} WINS!!!!!!!!!!!!!!"
+        puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
     end
     unless game_over
       if(board_spaces_left > 0)
-        if(next_turn == user_piece)
+        if(next_turn == user.piece)
           user_turn
         else
           cpu_turn
@@ -278,7 +293,7 @@ class TicTacToe
   private
 # move these to the appropriate classes
   attr_reader :potential_victory_scenarios, :cpu
-  attr_accessor :user_piece, :board_spaces, :user_name 
+  attr_accessor :user,:board_spaces 
 end
 
 if __FILE__ ==$0
