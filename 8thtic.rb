@@ -2,6 +2,8 @@
 # the cpu is smart enough to know that if it strarts in the conerner and the user
 # doesnt choose the middle - then cpu will take the middle - automaticaly causing him to win
 # we should also change corner_defense to corner_strategy
+# remember when you go first and hit a corner - then the opposite corner - computer builds
+# up but only has options 4 and 6 -- not cool
 class TicTacToe
   def initialize
   # User class
@@ -108,18 +110,10 @@ class TicTacToe
     spaces.select{|space| space == player_piece}.length
   end
 
-
-# CPU class method
   def find_empty_spaces_in_victory_scenario(victory_scenario)
-    possible_moves = []
-    victory_scenario.each do |i|  
-      if board_spaces[i] == " "
-        possible_moves << i
-      end
-    end
-    puts possible_moves.inspect
-    possible_moves.sample
+    victory_scenario.select {|space| board_spaces[space] == " "}.sample
   end
+
 
   def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |scenario|
@@ -127,8 +121,7 @@ class TicTacToe
         return find_empty_spaces_in_victory_scenario(scenario)
       end 
     end
-    false
-    # return space || false
+    false  # spaces || false
   end
 
 
