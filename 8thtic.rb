@@ -55,18 +55,6 @@ class TicTacToe
     @cpu = CPU.new
     @user = User.new
     @board = Board.new
-
-
-    @potential_victory_scenarios = [
-      [1,2,3], # 3 potential horizontal victories
-      [4,5,6], 
-      [7,8,9],
-      [1,4,7], # 3 potential vertical victories
-      [2,5,8],
-      [3,6,9],
-      [1,5,9], # 2 potential diagonal victories
-      [3,5,7]
-    ]
   end
 
 # Tic Tac Toe class method
@@ -150,7 +138,7 @@ class TicTacToe
   end
 
   def calculate_move(piece_to_be_counted, num_of_occurances)
-    potential_victory_scenarios.each do |scenario|
+    board.potential_victory_scenarios.each do |scenario|
       if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
         return find_empty_spaces_in_victory_scenario(scenario)
       end 
@@ -248,7 +236,7 @@ class TicTacToe
 # Tic Tac Toe class method
   def check_game(next_turn)
     game_over = nil
-    potential_victory_scenarios.each do |scenario|
+    board.potential_victory_scenarios.each do |scenario|
       if piece_count_for_scenario(scenario, cpu.piece) == 3
         border
         puts "!!!!!!!!!!!!!!#{cpu.name} WINS!!!!!!!!!!!!!!"
@@ -286,7 +274,7 @@ class TicTacToe
 
   private
 # move these to the appropriate classes
-  attr_reader :potential_victory_scenarios, :cpu
+  attr_reader :cpu
   attr_accessor :user,:board
 end
 
