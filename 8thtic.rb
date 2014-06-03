@@ -1,13 +1,5 @@
-# remember when you go first and hit a corner - then the opposite corner - computer builds
-# up but only has options 4 and 6 -- not cool
-# get all puts statements in the start_game method
-# if i move user turn up to the User class there are some odd dependencies that need to take place
-# the same with moving print_board up to the board class (border being an example)
-# change user_turn to collect_user_input and perhaps the same with cpu_input
-# when I move the cpu methods to the cpu class - I have the create a new user
-# instnace and a new board instance in the cpu class which fucks things up
 class Player
-  attr_accessor :piece, :name ## note
+  attr_accessor :piece, :name 
 end
 
 class CPU < Player
@@ -18,11 +10,11 @@ class CPU < Player
     @user = user
   end
 
-  def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
+  def scenario_spaces_analysis(scenario) 
     scenario.map {|scenario_position| board.board_spaces[scenario_position]}
   end
 
-  def piece_count_for_scenario(scenario, player_piece) #collects the number of pieces in scenario
+  def piece_count_for_scenario(scenario, player_piece)
     spaces = scenario_spaces_analysis(scenario)
     return 0 if spaces.any? {|space| space != player_piece && space != ' '}
     spaces.select{|space| space == player_piece}.length
@@ -51,7 +43,7 @@ class CPU < Player
     calculate_move(user.piece, 2)
   end
 
-  def middle_strategy
+  def middle_tactic
     puts "middle defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
@@ -62,7 +54,7 @@ class CPU < Player
     false
   end
 
-  def corner_strategy
+  def corner_tactic
     puts "corner defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
@@ -88,16 +80,18 @@ class CPU < Player
   end
 
   def cpu_find_move
-    seek_victory ||  block_victory || middle_strategy || corner_strategy || build_up_a_victory_scenario || select_random_location
+    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_location
   end
 
 end
+
 
 class User < Player
   def initialize
     super
   end
 end
+
 
 class Board
   attr_reader :potential_victory_scenarios
@@ -130,7 +124,7 @@ class TicTacToe
     @cpu = CPU.new(@board, @user)
   end
 
-# collects input and provides output
+  # collects input and provides output
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -174,8 +168,6 @@ class TicTacToe
     puts "*************************************************************************"
   end
 
-  ################# BOARD CLASS ##################
-
   def print_board 
     border
     puts "                Gameplay Board        Reference Board"
@@ -186,8 +178,6 @@ class TicTacToe
     puts "                    #{board.board_spaces[7]}|#{board.board_spaces[8]}|#{board.board_spaces[9]}         *        7|8|9"
     border
   end
-
-  ################### END BOARD CLASS ######################
 
   def cpu_turn
     move = cpu.cpu_find_move
@@ -210,7 +200,6 @@ class TicTacToe
       incorrect_input
     end
   end
-
 
   def wrong_move
     puts "You must choose an empty space"
@@ -245,7 +234,7 @@ class TicTacToe
         end
       else
         border
-        puts "!!!!!!!!!!!!!!DRAW!!!!!!!!!!!!!!"
+        puts "!!!!!!!!!!!!!!CATS GAME!!!!!!!!!!!!!!"
       end
     end
   end
