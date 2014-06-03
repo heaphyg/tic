@@ -27,6 +27,8 @@ class User < Player
 end
 
 class Board
+  attr_reader :potential_victory_scenarios
+  attr_accessor :board_spaces 
   def initialize
      @board_spaces = { 
       1 => " ",2 => " ",3 => " ",
@@ -52,17 +54,9 @@ class TicTacToe
   def initialize
     @cpu = CPU.new
     @user = User.new
+    @board = Board.new
 
 
- 
-
-# Board class
-    @board_spaces = { 
-      1 => " ",2 => " ",3 => " ",
-      4 => " ",5 => " ",6 => " ",
-      7 => " ",8 => " ",9 => " "
-    }
-# Board class
     @potential_victory_scenarios = [
       [1,2,3], # 3 potential horizontal victories
       [4,5,6], 
@@ -126,23 +120,23 @@ class TicTacToe
   def print_board 
     border
     puts "                Gameplay Board        Reference Board"
-    puts "                    #{board_spaces[1]}|#{board_spaces[2]}|#{board_spaces[3]}         *        1|2|3"
+    puts "                    #{board.board_spaces[1]}|#{board.board_spaces[2]}|#{board.board_spaces[3]}         *        1|2|3"
     puts "                   -------"
-    puts "                    #{board_spaces[4]}|#{board_spaces[5]}|#{board_spaces[6]}         *        4|5|6"
+    puts "                    #{board.board_spaces[4]}|#{board.board_spaces[5]}|#{board.board_spaces[6]}         *        4|5|6"
     puts "                   -------"
-    puts "                    #{board_spaces[7]}|#{board_spaces[8]}|#{board_spaces[9]}         *        7|8|9"
+    puts "                    #{board.board_spaces[7]}|#{board.board_spaces[8]}|#{board.board_spaces[9]}         *        7|8|9"
     border
   end
 
 # CPU class method
   def cpu_turn
     move = cpu_find_move
-    board_spaces[move] = cpu.piece
+    board.board_spaces[move] = cpu.piece
     check_game(user.piece)
   end
 
   def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
-    scenario.map {|scenario_position| board_spaces[scenario_position]}
+    scenario.map {|scenario_position| board.board_spaces[scenario_position]}
   end
 
   def piece_count_for_scenario(scenario, player_piece) #collects the number of pieces in scenario
@@ -152,7 +146,7 @@ class TicTacToe
   end
 
   def find_empty_spaces_in_victory_scenario(victory_scenario)
-    victory_scenario.select {|space| board_spaces[space] == " "}.sample
+    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
   end
 
   def calculate_move(piece_to_be_counted, num_of_occurances)
@@ -181,7 +175,7 @@ class TicTacToe
   def middle_defense
     puts "middle defense"
     corner_scenario = [1,3,7,9]
-    middle_space = board_spaces[5] 
+    middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
     if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
       return 5
@@ -193,7 +187,7 @@ class TicTacToe
   def corner_defense
     puts "corner defense"
     corner_scenario = [1,3,7,9]
-    middle_space = board_spaces[5] 
+    middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
     if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
       return corner_scenario.sample
@@ -209,7 +203,7 @@ class TicTacToe
 
 # CPU class method
   def find_all_empty_spaces
-    board_spaces.select { |k, v| v == " "}.keys
+    board.board_spaces.select { |k, v| v == " "}.keys
   end
 
   def select_random_location
@@ -228,8 +222,8 @@ class TicTacToe
     input = gets.chomp
     if (1..9).include?(input.to_i)
       input = input.to_i
-      if board_spaces[input] == " "
-        board_spaces[input] = user.piece
+      if board.board_spaces[input] == " "
+        board.board_spaces[input] = user.piece
         check_game(cpu.piece)
       else
         wrong_move
@@ -283,7 +277,7 @@ class TicTacToe
 # Tic Tac Toe class method
   def board_spaces_left
     spaces_left = 0
-    board_spaces.each do |k, v|
+    board.board_spaces.each do |k, v|
       spaces_left += 1 if v == " "
     end
     spaces_left
@@ -293,7 +287,7 @@ class TicTacToe
   private
 # move these to the appropriate classes
   attr_reader :potential_victory_scenarios, :cpu
-  attr_accessor :user,:board_spaces 
+  attr_accessor :user,:board
 end
 
 if __FILE__ ==$0
