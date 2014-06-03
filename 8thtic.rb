@@ -1,5 +1,3 @@
-# we should change middle_strategy to middle_strategy becuase both players can use it 
-# we should also change corner_strategy to corner_strategy
 # remember when you go first and hit a corner - then the opposite corner - computer builds
 # up but only has options 4 and 6 -- not cool
 # get all puts statements in the start_game method
