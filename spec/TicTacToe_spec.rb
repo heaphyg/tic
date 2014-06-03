@@ -1,24 +1,21 @@
-
 require_relative 'spec_helper'
 
+
 describe "TicTacToe" do
-  context "when initiling a TicTacToe object" do
-    it '..............' do
-      # tic_tac_toe = TicTacToe.new
-    end
-  end
-  context "when prompt is called" do
-    it "it displays the user's name" do
-      $stdin = StringIO.new("Kevin\n")
-      tic_tac_toe = TicTacToe.new
-      expect(tic_tac_toe.prompt).to eq("Kevin")
-      $stdin = STDIN
+  context "#get_cpu_piece" do
+    tic_tac_toe = TicTacToe.new
+    it "assigns the opposing piece to the cpu based on the user's selection" do
+      expect(tic_tac_toe.get_cpu_piece('X')).to eq('O')
     end
   end
 end
 
 
 #########################################################
+
+# def get_cpu_piece(user_piece)
+#     user_piece == 'X' ? 'O' : 'X'
+# end
 
 # require "spec_helper"
 

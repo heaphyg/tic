@@ -1,19 +1,96 @@
 # remember when you go first and hit a corner - then the opposite corner - computer builds
 # up but only has options 4 and 6 -- not cool
 # get all puts statements in the start_game method
+# if i move user turn up to the User class there are some odd dependencies that need to take place
+# the same with moving print_board up to the board class (border being an example)
+# change user_turn to collect_user_input and perhaps the same with cpu_input
+# when I move the cpu methods to the cpu class - I have the create a new user
+# instnace and a new board instance in the cpu class which fucks things up
 class Player
-  attr_accessor :piece, :name 
-  def initialize
-    @name = nil
-    @piece = nil
-  end
+  attr_accessor :piece, :name ## note
 end
 
 class CPU < Player
-  def initialize
-    super
+  attr_reader :board, :user
+  def initialize(board, user)
     @name = "Mr. Computer"
+    @board = board
+    @user = user
   end
+
+  def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
+    scenario.map {|scenario_position| board.board_spaces[scenario_position]}
+  end
+
+  def piece_count_for_scenario(scenario, player_piece) #collects the number of pieces in scenario
+    spaces = scenario_spaces_analysis(scenario)
+    return 0 if spaces.any? {|space| space != player_piece && space != ' '}
+    spaces.select{|space| space == player_piece}.length
+  end
+
+  def find_empty_spaces_in_victory_scenario(victory_scenario)
+    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
+  end
+
+  def calculate_move(piece_to_be_counted, num_of_occurances)
+    board.potential_victory_scenarios.each do |scenario|
+      if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
+        return find_empty_spaces_in_victory_scenario(scenario)
+      end 
+    end
+    false
+  end
+
+  def seek_victory
+    puts "seek victory"
+    calculate_move(self.piece, 2)
+  end
+
+  def block_victory
+    puts "block victory"
+    calculate_move(user.piece, 2)
+  end
+
+  def middle_strategy
+    puts "middle defense"
+    corner_scenario = [1,3,7,9]
+    middle_space = board.board_spaces[5] 
+    corner_spaces = scenario_spaces_analysis(corner_scenario)
+    if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
+      return 5
+    end
+    false
+  end
+
+  def corner_strategy
+    puts "corner defense"
+    corner_scenario = [1,3,7,9]
+    middle_space = board.board_spaces[5] 
+    corner_spaces = scenario_spaces_analysis(corner_scenario)
+    if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
+      return corner_scenario.sample
+    end
+    false
+  end
+
+  def build_up_a_victory_scenario
+    puts "build up"
+    calculate_move(self.piece, 1)
+  end
+
+  def find_all_empty_spaces
+    board.board_spaces.select { |k, v| v == " "}.keys
+  end
+
+  def select_random_location
+    puts "random selection"
+    find_all_empty_spaces.sample
+  end
+
+  def cpu_find_move
+    seek_victory ||  block_victory || middle_strategy || corner_strategy || build_up_a_victory_scenario || select_random_location
+  end
+
 end
 
 class User < Player
@@ -48,12 +125,12 @@ end
 
 class TicTacToe
   def initialize
-    @cpu = CPU.new
     @user = User.new
     @board = Board.new
+    @cpu = CPU.new(@board, @user)
   end
 
-# Controller of sorts
+# collects input and provides output
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -75,6 +152,7 @@ class TicTacToe
     return gets.chomp.capitalize
   end
 
+  
   def get_user_piece
     selection = nil
     until ['X','O'].include?(selection)
@@ -96,6 +174,8 @@ class TicTacToe
     puts "*************************************************************************"
   end
 
+  ################# BOARD CLASS ##################
+
   def print_board 
     border
     puts "                Gameplay Board        Reference Board"
@@ -107,89 +187,14 @@ class TicTacToe
     border
   end
 
-############## CPU CLASS ####################
+  ################### END BOARD CLASS ######################
+
   def cpu_turn
-    move = cpu_find_move
+    move = cpu.cpu_find_move
     board.board_spaces[move] = cpu.piece
-    check_game(user.piece)
+    check_game(user.piece) # this is a tictactoe class thing
   end
 
-  def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
-    scenario.map {|scenario_position| board.board_spaces[scenario_position]}
-  end
-
-  def piece_count_for_scenario(scenario, player_piece) #collects the number of pieces in scenario
-    spaces = scenario_spaces_analysis(scenario)
-    return 0 if spaces.any? {|space| space != player_piece && space != ' '}
-    spaces.select{|space| space == player_piece}.length
-  end
-
-  def find_empty_spaces_in_victory_scenario(victory_scenario)
-    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
-  end
-
-  def calculate_move(piece_to_be_counted, num_of_occurances)
-    board.potential_victory_scenarios.each do |scenario|
-      if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
-        return find_empty_spaces_in_victory_scenario(scenario)
-      end 
-    end
-    false
-  end
-
-  def seek_victory
-    puts "seek victory"
-    calculate_move(cpu.piece, 2)
-  end
-
-  def block_victory
-    puts "block victory"
-    calculate_move(user.piece, 2)
-  end
-
-  def middle_strategy
-    puts "middle defense"
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
-    corner_spaces = scenario_spaces_analysis(corner_scenario)
-    if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
-      return 5
-    end
-    false
-  end
-
-  def corner_strategy
-    puts "corner defense"
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
-    corner_spaces = scenario_spaces_analysis(corner_scenario)
-    if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
-      return corner_scenario.sample
-    end
-    false
-  end
-
-  def build_up_a_victory_scenario
-    puts "build up"
-    calculate_move(cpu.piece, 1)
-  end
-
-  def find_all_empty_spaces
-    board.board_spaces.select { |k, v| v == " "}.keys
-  end
-
-  def select_random_location
-    puts "random selection"
-    find_all_empty_spaces.sample
-  end
-
-  def cpu_find_move
-    seek_victory ||  block_victory || middle_strategy || corner_strategy || build_up_a_victory_scenario || select_random_location
-  end
-
-  ################## END CPU CLASS ##################
-
-  ################# USER CLASS #####################
   def user_turn
     print_board
     input = gets.chomp
@@ -206,7 +211,6 @@ class TicTacToe
     end
   end
 
-  #################### END USER CLASS ###############
 
   def wrong_move
     puts "You must choose an empty space"
@@ -221,12 +225,12 @@ class TicTacToe
   def check_game(next_turn)
     game_over = nil
     board.potential_victory_scenarios.each do |scenario|
-      if piece_count_for_scenario(scenario, cpu.piece) == 3
+      if cpu.piece_count_for_scenario(scenario, cpu.piece) == 3  
         border
         puts "!!!!!!!!!!!!!!#{cpu.name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if piece_count_for_scenario(scenario, user.piece) == 3
+      if cpu.piece_count_for_scenario(scenario, user.piece) == 3 
         border
         puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
         game_over = true
