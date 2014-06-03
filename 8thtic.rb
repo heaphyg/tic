@@ -1,3 +1,7 @@
+# we should change middle_defense to middle_strategy becuase both players can use it 
+# the cpu is smart enough to know that if it strarts in the conerner and the user
+# doesnt choose the middle - then cpu will take the middle - automaticaly causing him to win
+# we should also change corner_defense to corner_strategy
 class TicTacToe
   def initialize
   # User class
@@ -27,10 +31,21 @@ class TicTacToe
 
 # Tic Tac Toe class method
   def start_game
-     self.user_name = prompt
-     user_turn_choice
-     initiate_first_player_move
-     print_board
+    self.user_name = prompt
+    self.user_piece = get_user_piece
+    # user_turn_choice
+    puts "XXXXXXXX:"
+    puts user_piece
+    if user_piece == 'X'
+      border
+      puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
+    else
+      border
+      puts "#{user_name} you have chosen to go second. Bold move. Please select the number of the space you wish to occupy."
+    end
+    self.cpu_piece = get_cpu_piece(user_piece)
+    initiate_first_player_move
+    print_board
   end
 
 # view 
@@ -40,25 +55,17 @@ class TicTacToe
     return gets.chomp.capitalize
   end
 
-# User class method
-  def user_turn_choice
-    proper_piece_selection = false
-    until proper_piece_selection
-      if !['X', 'O'].include?(user_piece)
-        puts "#{user_name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
-        self.user_piece = gets.chomp.upcase  
-      elsif user_piece  == 'X'
-        border
-        puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
-        proper_piece_selection = true
-        self.cpu_piece = 'O'
-      else
-        border
-        puts "#{user_name} you have chosen to go second. Bold move. Please select the number of the space you wish to occupy."
-        proper_piece_selection = true
-        self.cpu_piece = 'X'
-      end
+  def get_user_piece
+    selection = nil
+    until ['X','O'].include?(selection)
+      puts "#{user_name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
+      selection = gets.chomp.upcase
     end
+    selection
+  end
+
+  def get_cpu_piece(user_piece)
+    user_piece == 'X' ? 'O' : 'X'
   end
  
  # User class method
@@ -91,19 +98,18 @@ class TicTacToe
     check_game(user_piece)
   end
 
-# CPU class method
-  def calculate_piece_occurance_in_victory_scenario(victory_scenario, piece)
-    times = 0
-    victory_scenario.each do |i|
-      times += 1 if board_spaces[i] == piece
-      unless board_spaces[i] == piece || board_spaces[i] == " "
-        #opposite piece is in column so column cannot be used for win.
-        #therefore, the strategic thing to do is choose a dif column so return 0.
-        return 0
-      end
-    end
-    times
+  ############
+  def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
+    scenario.map {|scenario_position| board_spaces[scenario_position]}
   end
+
+  def piece_count_for_scenario(scenario, player_piece) #collects the number of pieces in scenario
+    spaces = scenario_spaces_analysis(scenario)
+    return 0 if spaces.any? {|space| space != player_piece && space != ' '}
+    spaces.select{|space| space == player_piece}.length
+  end
+
+  ############
 
 # CPU class method
   def find_empty_spaces_in_victory_scenario(victory_scenario)
@@ -117,15 +123,18 @@ class TicTacToe
     possible_moves.sample
   end
 
-# CPU class method
+  #############
   def calculate_move(piece_to_be_counted, num_of_occurances)
-    potential_victory_scenarios.each do |victory_scenario|
-      if calculate_piece_occurance_in_victory_scenario(victory_scenario, piece_to_be_counted) == num_of_occurances
-        return find_empty_spaces_in_victory_scenario(victory_scenario)
-      end
+    potential_victory_scenarios.each do |scenario|
+      if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
+        return find_empty_spaces_in_victory_scenario(scenario)
+      end 
     end
     false
+    # return space || false
   end
+
+  #############
 
 # CPU class method
   def seek_victory
@@ -213,12 +222,12 @@ class TicTacToe
   def check_game(next_turn)
     game_over = nil
     potential_victory_scenarios.each do |scenario|
-      if calculate_piece_occurance_in_victory_scenario(scenario, cpu_piece) == 3
+      if piece_count_for_scenario(scenario, cpu_piece) == 3
         border
         puts "!!!!!!!!!!!!!!CPU WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if calculate_piece_occurance_in_victory_scenario(scenario, user_piece) == 3
+      if piece_count_for_scenario(scenario, user_piece) == 3
         border
         puts "!!!!!!!!!!!!!!#{user_name} WINS!!!!!!!!!!!!!!"
         game_over = true
