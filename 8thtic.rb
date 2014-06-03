@@ -98,7 +98,6 @@ class TicTacToe
     check_game(user_piece)
   end
 
-  ############
   def scenario_spaces_analysis(scenario)  # collect that game state of a scenario
     scenario.map {|scenario_position| board_spaces[scenario_position]}
   end
@@ -109,7 +108,6 @@ class TicTacToe
     spaces.select{|space| space == player_piece}.length
   end
 
-  ############
 
 # CPU class method
   def find_empty_spaces_in_victory_scenario(victory_scenario)
@@ -123,7 +121,6 @@ class TicTacToe
     possible_moves.sample
   end
 
-  #############
   def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |scenario|
       if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
@@ -134,7 +131,6 @@ class TicTacToe
     # return space || false
   end
 
-  #############
 
 # CPU class method
   def seek_victory
