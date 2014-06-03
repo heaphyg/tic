@@ -2,7 +2,7 @@
 # up but only has options 4 and 6 -- not cool
 # get all puts statements in the start_game method
 class Player
-   attr_accessor :piece, :name 
+  attr_accessor :piece, :name 
   def initialize
     @name = nil
     @piece = nil
@@ -53,7 +53,7 @@ class TicTacToe
     @board = Board.new
   end
 
-# Controller
+# Controller of sorts
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -89,7 +89,7 @@ class TicTacToe
   end
  
   def initiate_first_player_move
-    user.piece == 'X' ? user_turn : cpu_turn
+    user.piece == 'X' ? user_turn : cpu_turn    # add CPU.cpu_turn  and also put user turn inside the user
   end
 
   def border
@@ -107,6 +107,7 @@ class TicTacToe
     border
   end
 
+############## CPU CLASS ####################
   def cpu_turn
     move = cpu_find_move
     board.board_spaces[move] = cpu.piece
@@ -186,6 +187,9 @@ class TicTacToe
     seek_victory ||  block_victory || middle_strategy || corner_strategy || build_up_a_victory_scenario || select_random_location
   end
 
+  ################## END CPU CLASS ##################
+
+  ################# USER CLASS #####################
   def user_turn
     print_board
     input = gets.chomp
@@ -202,14 +206,16 @@ class TicTacToe
     end
   end
 
+  #################### END USER CLASS ###############
+
   def wrong_move
     puts "You must choose an empty space"
-    user_turn
+    user_turn  ## put user.user_turn
   end
 
   def incorrect_input
     puts "Please specify a move with an integer 1..9"
-    user_turn
+    user_turn   # put useer.user_turn
   end
 
   def check_game(next_turn)
@@ -229,9 +235,9 @@ class TicTacToe
     unless game_over
       if(board_spaces_left > 0)
         if(next_turn == user.piece)
-          user_turn
+          user_turn   # user.user_turn
         else
-          cpu_turn
+          cpu_turn    ### Add CPU.cpu_turn
         end
       else
         border
