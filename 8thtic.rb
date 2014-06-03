@@ -39,7 +39,7 @@ class TicTacToe
     @user_name = nil
     @user_piece = nil 
   # CPU class
-    @cpu_piece = nil
+ 
 
 # Board class
     @board_spaces = { 
@@ -278,7 +278,7 @@ class TicTacToe
   private
 # move these to the appropriate classes
   attr_reader :potential_victory_scenarios, :cpu
-  attr_accessor :user_piece, :cpu_piece, :board_spaces, :user_name 
+  attr_accessor :user_piece, :board_spaces, :user_name 
 end
 
 if __FILE__ ==$0
