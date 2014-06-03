@@ -138,8 +138,9 @@ class TicTacToe
   def middle_defense
     puts "middle defense"
     corner_scenario = [1,3,7,9]
-    corner_pieces = scenario_spaces_analysis(corner_scenario)
-    if corner_pieces.any? {|piece| piece != ' '} && (board_spaces[5] == " ")
+    middle_space = board_spaces[5] 
+    corner_spaces = scenario_spaces_analysis(corner_scenario)
+    if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
       return 5
     end
     false
@@ -149,8 +150,9 @@ class TicTacToe
   def corner_defense
     puts "corner defense"
     corner_scenario = [1,3,7,9]
-    corner_pieces = scenario_spaces_analysis(corner_scenario)
-    if corner_pieces.all? {|piece| piece == ' '} && (board_spaces[5] != " ")
+    middle_space = board_spaces[5] 
+    corner_spaces = scenario_spaces_analysis(corner_scenario)
+    if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
       return corner_scenario.sample
     end
     false
