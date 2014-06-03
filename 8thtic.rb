@@ -57,7 +57,7 @@ class TicTacToe
     @board = Board.new
   end
 
-# Tic Tac Toe class method
+# Controller
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -75,7 +75,6 @@ class TicTacToe
     print_board
   end
 
-# view 
   def get_user_name
     return gets.chomp.capitalize
   end
@@ -93,18 +92,14 @@ class TicTacToe
     user_piece == 'X' ? 'O' : 'X'
   end
  
- # User class method
   def initiate_first_player_move
     user.piece == 'X' ? user_turn : cpu_turn
   end
 
-#view
   def border
     puts "*************************************************************************"
   end
 
-
-#view stuff
   def print_board 
     border
     puts "                Gameplay Board        Reference Board"
@@ -116,7 +111,6 @@ class TicTacToe
     border
   end
 
-# CPU class method
   def cpu_turn
     move = cpu_find_move
     board.board_spaces[move] = cpu.piece
@@ -146,20 +140,16 @@ class TicTacToe
     false
   end
 
-
-# CPU class method
   def seek_victory
     puts "seek victory"
     calculate_move(cpu.piece, 2)
   end
 
-# CPU class method
   def block_victory
     puts "block victory"
     calculate_move(user.piece, 2)
   end
 
-  # CPU class method
   def middle_defense
     puts "middle defense"
     corner_scenario = [1,3,7,9]
@@ -171,7 +161,6 @@ class TicTacToe
     false
   end
 
-# CPU class method
   def corner_defense
     puts "corner defense"
     corner_scenario = [1,3,7,9]
@@ -183,13 +172,11 @@ class TicTacToe
     false
   end
 
-# CPU class method
   def build_up_a_victory_scenario
     puts "build up"
     calculate_move(cpu.piece, 1)
   end
 
-# CPU class method
   def find_all_empty_spaces
     board.board_spaces.select { |k, v| v == " "}.keys
   end
@@ -199,12 +186,10 @@ class TicTacToe
     find_all_empty_spaces.sample
   end
 
-# CPU class method
   def cpu_find_move
     seek_victory ||  block_victory || middle_defense || corner_defense || build_up_a_victory_scenario || select_random_location
   end
 
-# User class method
   def user_turn
     print_board
     input = gets.chomp
@@ -221,19 +206,16 @@ class TicTacToe
     end
   end
 
-# User class method
   def wrong_move
     puts "You must choose an empty space"
     user_turn
   end
 
-# User class method
   def incorrect_input
     puts "Please specify a move with an integer 1..9"
     user_turn
   end
 
-# Tic Tac Toe class method
   def check_game(next_turn)
     game_over = nil
     board.potential_victory_scenarios.each do |scenario|
@@ -262,7 +244,6 @@ class TicTacToe
     end
   end
 
-# Tic Tac Toe class method
   def board_spaces_left
     spaces_left = 0
     board.board_spaces.each do |k, v|
@@ -271,9 +252,8 @@ class TicTacToe
     spaces_left
   end
 
-
   private
-# move these to the appropriate classes
+
   attr_reader :cpu
   attr_accessor :user,:board
 end
