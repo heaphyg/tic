@@ -234,7 +234,7 @@ class TicTacToe
         end
       else
         border
-        puts "!!!!!!!!!!!!!!CATS GAME!!!!!!!!!!!!!!"
+        puts "!!!!!!!!!!!!!!CAT'S GAME!!!!!!!!!!!!!!"
       end
     end
   end
