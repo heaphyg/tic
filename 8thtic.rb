@@ -1,7 +1,5 @@
-# we should change middle_defense to middle_strategy becuase both players can use it 
-# the cpu is smart enough to know that if it strarts in the conerner and the user
-# doesnt choose the middle - then cpu will take the middle - automaticaly causing him to win
-# we should also change corner_defense to corner_strategy
+# we should change middle_strategy to middle_strategy becuase both players can use it 
+# we should also change corner_strategy to corner_strategy
 # remember when you go first and hit a corner - then the opposite corner - computer builds
 # up but only has options 4 and 6 -- not cool
 # get all puts statements in the start_game method
@@ -150,7 +148,7 @@ class TicTacToe
     calculate_move(user.piece, 2)
   end
 
-  def middle_defense
+  def middle_strategy
     puts "middle defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
@@ -161,7 +159,7 @@ class TicTacToe
     false
   end
 
-  def corner_defense
+  def corner_strategy
     puts "corner defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
@@ -187,7 +185,7 @@ class TicTacToe
   end
 
   def cpu_find_move
-    seek_victory ||  block_victory || middle_defense || corner_defense || build_up_a_victory_scenario || select_random_location
+    seek_victory ||  block_victory || middle_strategy || corner_strategy || build_up_a_victory_scenario || select_random_location
   end
 
   def user_turn
