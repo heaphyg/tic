@@ -4,6 +4,7 @@
 # we should also change corner_defense to corner_strategy
 # remember when you go first and hit a corner - then the opposite corner - computer builds
 # up but only has options 4 and 6 -- not cool
+# get all puts statements in the start_game method
 class TicTacToe
   def initialize
   # User class
@@ -33,11 +34,10 @@ class TicTacToe
 
 # Tic Tac Toe class method
   def start_game
-    self.user_name = prompt
+    puts "Welcome to Tic Tac Toe!"
+    puts "what is your name?"
+    self.user_name = get_user_name
     self.user_piece = get_user_piece
-    # user_turn_choice
-    puts "XXXXXXXX:"
-    puts user_piece
     if user_piece == 'X'
       border
       puts "Excellent #{user_name}. You have chosen to go first. Please select the number of the space you wish to occupy."
@@ -51,9 +51,7 @@ class TicTacToe
   end
 
 # view 
-  def prompt
-    puts "Welcome to Tic Tac Toe!"
-    puts "what is your name?"
+  def get_user_name
     return gets.chomp.capitalize
   end
 
@@ -114,14 +112,13 @@ class TicTacToe
     victory_scenario.select {|space| board_spaces[space] == " "}.sample
   end
 
-
   def calculate_move(piece_to_be_counted, num_of_occurances)
     potential_victory_scenarios.each do |scenario|
       if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
         return find_empty_spaces_in_victory_scenario(scenario)
       end 
     end
-    false  # spaces || false
+    false
   end
 
 
@@ -162,15 +159,13 @@ class TicTacToe
   end
 
 # CPU class method
+  def find_all_empty_spaces
+    board_spaces.select { |k, v| v == " "}.keys
+  end
+
   def select_random_location
     puts "random selection"
-    key_collection = board_spaces.keys;
-    i = rand(key_collection.length)
-    if board_spaces[key_collection[i]] == " "
-      return key_collection[i]
-    else
-      board_spaces.each { |space,value| return space if value == " " }
-    end
+    find_all_empty_spaces.sample
   end
 
 # CPU class method
