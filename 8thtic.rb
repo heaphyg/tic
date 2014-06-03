@@ -134,11 +134,13 @@ class TicTacToe
     calculate_move(user_piece, 2)
   end
 
-# CPU class method
+  # CPU class method
   def middle_defense
     puts "middle defense"
-    if (board_spaces[1] != " " || board_spaces[3] != " " || board_spaces[7] != " " || board_spaces[9] != " ") && (board_spaces[5] == " ")
-      return 5  
+    corner_scenario = [1,3,7,9]
+    corner_pieces = scenario_spaces_analysis(corner_scenario)
+    if corner_pieces.any? {|piece| piece != ' '} && (board_spaces[5] == " ")
+      return 5
     end
     false
   end
@@ -146,8 +148,10 @@ class TicTacToe
 # CPU class method
   def corner_defense
     puts "corner defense"
-    if (board_spaces[5] != " ") && (board_spaces[1] == " " && board_spaces[3] == " " && board_spaces[7] == " " && board_spaces[9] == " ")
-      return [1,3,7,9].sample
+    corner_scenario = [1,3,7,9]
+    corner_pieces = scenario_spaces_analysis(corner_scenario)
+    if corner_pieces.all? {|piece| piece == ' '} && (board_spaces[5] != " ")
+      return corner_scenario.sample
     end
     false
   end
