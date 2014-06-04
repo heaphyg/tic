@@ -1,4 +1,5 @@
-# uncomment out the private word at the bottom
+## to run tests gem install rspec-expectations
+
 class Player
   attr_accessor :piece, :name 
 end
@@ -109,13 +110,15 @@ end
 
 
 class TicTacToe
+  attr_reader :ai
+  attr_accessor :user,:board
   def initialize
     @user = User.new
     @board = Board.new
     @ai = AI.new(@board, @user)
   end
 
-  # collects input and provides output
+  # start_game collects input and provides output
   def start_game
     puts "Welcome to Tic Tac Toe!"
     puts "what is your name?"
@@ -173,7 +176,7 @@ class TicTacToe
   def cpu_turn
     move = ai.find_move
     board.board_spaces[move] = ai.piece
-    check_game(user.piece) # this is a tictactoe class thing
+    check_game(user.piece)
   end
 
   def user_turn
@@ -202,21 +205,25 @@ class TicTacToe
     user_turn  
   end
 
-  def check_game(next_turn)
-    game_over = nil
+  def game_over?
+    # game_over = nil
     board.potential_victory_scenarios.each do |scenario|
       if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
         border
         puts "!!!!!!!!!!!!!!#{ai.name} WINS!!!!!!!!!!!!!!"
-        game_over = true
+        return true
       end
       if ai.piece_count_for_scenario(scenario, user.piece) == 3 
         border
         puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
-        game_over = true
+        return true
       end
     end
-    unless game_over
+    return false
+  end
+
+  def check_game(next_turn)
+    unless game_over?
       if(board_spaces_left > 0)
         if(next_turn == user.piece)
           user_turn 
@@ -237,11 +244,6 @@ class TicTacToe
     end
     spaces_left
   end
-
-  # private
-
-  attr_reader :ai
-  attr_accessor :user,:board
 end
 
 if __FILE__ ==$0

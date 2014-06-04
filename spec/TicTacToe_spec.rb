@@ -1,8 +1,7 @@
+## to run tests gem install rspec-expectations
 
 require_relative 'spec_helper'
 require 'stringio'
-
-
 
 
   # context "#initiate_first_player_move (when X is selected by user)" do
@@ -27,27 +26,13 @@ require 'stringio'
   #   end
   # end
 
-#   context "#border" do
-#     it "prints out a border made up of asterisks" do
-#       output = tic_tac_toe.border
-#       output.should == "*************************************************************************"
-#       # expect(tic_tac_toe.border).to be == "*************************************************************************"
-#     end
-#   end
 
 
-# it "should say 'Hello from Rspec' when run" do        
-#   output = `ruby sayhello.rb`
-#   output.should == 'Hello from RSpec'   
-# end
 
 
-# describe "sayhello.rb" do
-#   it "should say 'Hello from Rspec' when ran" do        
-#     STDOUT.should_receive(:puts).with('Hello from RSpec')
-#     require_relative 'sayhello.rb' #load/run the file 
-#   end
-# end
+
+
+
 
 describe "Board" do
   let(:board) { Board.new }
@@ -239,19 +224,19 @@ describe "AI" do
     end
   end
 
-  # context "#corner_tactic - true" do
-  #   before do
-  #       board.board_spaces = { 
-  #         1 => " ",2 => " ",3 => " ",
-  #         4 => " ",5 => "X",6 => " ",
-  #         7 => " ",8 => " ",9 => " "
-  #       }  
-  #   end
+  context "#corner_tactic - true" do
+    before do
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => "X",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
 
-  #   it "it occupies a random corner when all corners are empty and the middle is occupied" do
-  #     expect(ai.corner_tactic).to be == #### 1 || 3 || 7 || 9
-  #   end
-  # end
+    it "it occupies a random corner when all corners are empty and the middle is occupied" do
+      [ai.corner_tactic].should_not include(2,4,6,8)
+    end
+  end
 
   context "#corner_tactic - false" do
     before do
@@ -281,20 +266,20 @@ describe "AI" do
     end
   end
 
-  # context "#build_up_a_victory_scenario - true" do
-  #   before do
-  #       ai.piece = 'X'
-  #       board.board_spaces = { 
-  #         1 => " ",2 => " ",3 => " ",
-  #         4 => " ",5 => " ",6 => " ",
-  #         7 => "X",8 => " ",9 => " "
-  #       }  
-  #   end
+  context "#build_up_a_victory_scenario - true" do
+    before do
+        ai.piece = 'X'
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => "X",8 => "O",9 => " "
+        }  
+    end
 
-  #   it "it returns an empty space from one of the possible victory scenarios" do
-  #     expect(ai.build_up_a_victory_scenario).to be == 1 || 4 || 5 || 8 || 3 || 9
-  #   end
-  # end
+    it "it returns a random empty space from one of the possible victory scenarios" do
+      [ai.build_up_a_victory_scenario].should_not include(2,3,6,9)
+    end
+  end
 
   context "#build_up_a_victory_scenario - false" do
     before do
@@ -326,20 +311,20 @@ describe "AI" do
     end
   end
 
-  # context "#select_random_location" do
-  #   before do
-  #       ai.piece = 'X'
-  #       board.board_spaces = { 
-  #         1 => " ",2 => " ",3 => " ",
-  #         4 => "O",5 => "X",6 => " ",
-  #         7 => "X",8 => "O",9 => "O"
-  #       }  
-  #   end
+  context "#select_random_location" do
+    before do
+        ai.piece = 'X'
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => "O",5 => "X",6 => " ",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
 
-  #   it "it returns a randomly selected value from find_all_empty_spaces" do
-  #     expect(ai.find_all_empty_spaces).to be == 1 || 2 || 3 ||6
-  #   end
-  # end
+    it "it returns a randomly selected value from find_all_empty_spaces" do
+      [ai.select_random_location].should_not include(4,5,7,8,9)
+    end
+  end
 end
 
 
@@ -417,6 +402,54 @@ describe "TicTacToe" do
       expect(tic_tac_toe.board_spaces_left).to be == 0
     end
   end
+
+  context "check_game" do
+     let(:board) { Board.new }
+     let(:user)  { User.new }
+     let(:ai)    { AI.new(board, user) }
+    before do
+        tic_tac_toe.ai.piece = 'X'
+        tic_tac_toe.board.board_spaces = { 
+          1 => "X",2 => "X",3 => "X",
+          4 => "O",5 => "X",6 => "X",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
+
+    it "it sets game_over to true when 3 X's in a victory scenario (A.I wins)" do
+      expect(tic_tac_toe.check_game).to be == game_over
+    end
+
+  end
 end
 
+
+
+  # def check_game(next_turn)
+  #   game_over = nil
+  #   board.potential_victory_scenarios.each do |scenario|
+  #     if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
+  #       border
+  #       puts "!!!!!!!!!!!!!!#{ai.name} WINS!!!!!!!!!!!!!!"
+  #       game_over = true
+  #     end
+  #     if ai.piece_count_for_scenario(scenario, user.piece) == 3 
+  #       border
+  #       puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
+  #       game_over = true
+  #     end
+  #   end
+  #   unless game_over
+  #     if(board_spaces_left > 0)
+  #       if(next_turn == user.piece)
+  #         user_turn 
+  #       else
+  #         cpu_turn   
+  #       end
+  #     else
+  #       border
+  #       puts "!!!!!!!!!!!!!!CAT'S GAME!!!!!!!!!!!!!!"
+  #     end
+  #   end
+  # end
  
