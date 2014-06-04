@@ -1,3 +1,4 @@
+# uncomment out the private word at the bottom
 class Player
   attr_accessor :piece, :name 
 end
@@ -34,17 +35,14 @@ class AI < Player
   end
 
   def seek_victory
-    puts "seek victory"
     calculate_move(self.piece, 2)
   end
 
   def block_victory
-    puts "block victory"
     calculate_move(user.piece, 2)
   end
 
   def middle_tactic
-    puts "middle defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -55,7 +53,6 @@ class AI < Player
   end
 
   def corner_tactic
-    puts "corner defense"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -66,7 +63,6 @@ class AI < Player
   end
 
   def build_up_a_victory_scenario
-    puts "build up"
     calculate_move(self.piece, 1)
   end
 
@@ -75,11 +71,10 @@ class AI < Player
   end
 
   def select_random_location
-    puts "random selection"
     find_all_empty_spaces.sample
   end
 
-  def cpu_find_move
+  def find_move
     seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_location
   end
 
@@ -176,7 +171,7 @@ class TicTacToe
   end
 
   def cpu_turn
-    move = ai.cpu_find_move
+    move = ai.find_move
     board.board_spaces[move] = ai.piece
     check_game(user.piece) # this is a tictactoe class thing
   end
@@ -199,7 +194,7 @@ class TicTacToe
 
   def wrong_move
     puts "You must choose an empty space"
-    user_turn  ## put user.user_turn
+    user_turn 
   end
 
   def incorrect_input

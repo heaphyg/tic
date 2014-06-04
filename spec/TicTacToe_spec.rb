@@ -1,5 +1,346 @@
+
 require_relative 'spec_helper'
 require 'stringio'
+
+
+
+
+  # context "#initiate_first_player_move (when X is selected by user)" do
+  #   before do
+  #     user = User.new
+  #     user.piece = 'X'
+  #   end
+
+  #   it "runs #user_turn" do
+  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.user_turn)
+  #   end
+  # end
+
+  # context "#initiate_first_player_move (when O is selected by user)" do
+  #   before do
+  #     user = User.new
+  #     user.piece = 'O'
+  #   end
+
+  #   it "runs #user_turn" do
+  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.cpu_turn)
+  #   end
+  # end
+
+#   context "#border" do
+#     it "prints out a border made up of asterisks" do
+#       output = tic_tac_toe.border
+#       output.should == "*************************************************************************"
+#       # expect(tic_tac_toe.border).to be == "*************************************************************************"
+#     end
+#   end
+
+
+# it "should say 'Hello from Rspec' when run" do        
+#   output = `ruby sayhello.rb`
+#   output.should == 'Hello from RSpec'   
+# end
+
+
+# describe "sayhello.rb" do
+#   it "should say 'Hello from Rspec' when ran" do        
+#     STDOUT.should_receive(:puts).with('Hello from RSpec')
+#     require_relative 'sayhello.rb' #load/run the file 
+#   end
+# end
+
+describe "Board" do
+  let(:board) { Board.new }
+  context "#board_spaces" do
+    it "returns a hash representing the state of the board" do
+       expect(board.board_spaces).to be == { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => " "
+       }
+    end
+  end
+
+  context "#potential_victory_scenarios" do
+    it "returns a nested array of victory_scenario arrays" do
+      expect(board.potential_victory_scenarios).to be ==
+        [ 
+          [1,2,3], 
+          [4,5,6], 
+          [7,8,9],
+          [1,4,7],
+          [2,5,8],
+          [3,6,9],
+          [1,5,9], 
+          [3,5,7]
+        ]
+    end
+  end
+end
+
+
+
+describe "AI" do
+  let(:board) { Board.new }
+  let(:user)  { User.new }
+  let(:ai)   { AI.new(board, user) }
+  
+  context "#scenario_spaces_analysis(scenario)" do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "returns the board state associated with a particular victory scenario" do
+      expect(ai.scenario_spaces_analysis([1,5,9])).to be == ['X', 'O', 'X']
+    end
+  end
+
+  context "#piece_count_for_scenario(scenario, player_piece) - not occupied by opponent " do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "it returns the current players piece count when the scenario is not occupied by opponent" do
+      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 2
+    end
+  end
+
+  context "#piece_count_for_scenario(scenario, player_piece) - occupied by opponent " do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "it returns 0 when the scenario is occupied by opponent" do
+      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 0
+    end
+  end
+
+  context "#find_empty_spaces_in_victory_scenario(victory_scenario)" do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "returns a random empty spaces from a particular victory_scenario" do
+      expect(ai.find_empty_spaces_in_victory_scenario([1,4,7])).not_to be == 1
+    end
+  end
+
+  context "#seek_victory - true" do
+    before do
+        ai.piece = "O"
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => "O",8 => " ",9 => "X"
+        }  
+    end
+    it "returns the space to be filled in order to achieve victory" do
+      expect(ai.seek_victory).to be == 3
+    end
+  end
+
+  context "#seek_victory - false" do
+    before do
+        ai.piece = "O"
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => "O",8 => " ",9 => "X"
+        }  
+    end
+    it "returns false when there are no victory scenarios with 2 A.I pieces" do
+      expect(ai.seek_victory).to be == false
+    end
+  end
+
+  context "#block_victory - true" do
+      before do
+        user.piece = "X"
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "X",6 => " ",
+          7 => "O",8 => " ",9 => " "
+        }  
+    end
+    it "blocks the user from a potential victory" do
+      expect(ai.block_victory).to be == 9
+    end
+  end
+
+  context "#block_victory - false" do
+      before do
+        user.piece = "X"
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
+    it "returns false when there are no victory scenarios with 2 the user's pieces" do
+      expect(ai.block_victory).to be == false
+    end
+  end
+
+  context "#middle_tactic - true" do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
+
+    it "returns 5 (the middle space) when any of the corners are occupied && 5 is empty" do
+      expect(ai.middle_tactic).to be == 5
+    end
+  end
+
+   context "#middle_tactic - false" do
+    before do
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => "X",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
+
+    it "returns false when no corners are occupied" do
+      expect(ai.middle_tactic).to be == false
+    end
+  end
+
+  context "#middle_tactic - false" do
+    before do
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => "X",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
+
+    it "returns false when the middle is occupied" do
+      expect(ai.middle_tactic).to be == false
+    end
+  end
+
+  # context "#corner_tactic - true" do
+  #   before do
+  #       board.board_spaces = { 
+  #         1 => " ",2 => " ",3 => " ",
+  #         4 => " ",5 => "X",6 => " ",
+  #         7 => " ",8 => " ",9 => " "
+  #       }  
+  #   end
+
+  #   it "it occupies a random corner when all corners are empty and the middle is occupied" do
+  #     expect(ai.corner_tactic).to be == #### 1 || 3 || 7 || 9
+  #   end
+  # end
+
+  context "#corner_tactic - false" do
+    before do
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => "X",8 => " ",9 => " "
+        }  
+    end
+
+    it "it returns false if any of the coners are occupied" do
+      expect(ai.corner_tactic).to be == false
+    end
+  end
+
+  context "#corner_tactic - false" do
+    before do
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => " "
+        }  
+    end
+
+    it "it returns false if no conrners are occupied" do
+      expect(ai.corner_tactic).to be == false
+    end
+  end
+
+  # context "#build_up_a_victory_scenario - true" do
+  #   before do
+  #       ai.piece = 'X'
+  #       board.board_spaces = { 
+  #         1 => " ",2 => " ",3 => " ",
+  #         4 => " ",5 => " ",6 => " ",
+  #         7 => "X",8 => " ",9 => " "
+  #       }  
+  #   end
+
+  #   it "it returns an empty space from one of the possible victory scenarios" do
+  #     expect(ai.build_up_a_victory_scenario).to be == 1 || 4 || 5 || 8 || 3 || 9
+  #   end
+  # end
+
+  context "#build_up_a_victory_scenario - false" do
+    before do
+        ai.piece = 'X'
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => "O",5 => "X",6 => " ",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
+
+    it "it returns false when there are no potential victory scenarios to build up" do
+      expect(ai.build_up_a_victory_scenario).to be == false
+    end
+  end
+
+  context "#find_all_empty_spaces" do
+    before do
+        ai.piece = 'X'
+        board.board_spaces = { 
+          1 => " ",2 => " ",3 => " ",
+          4 => "O",5 => "X",6 => " ",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
+
+    it "it returns an array of all the empty locations on the board" do
+      expect(ai.find_all_empty_spaces).to be == [1,2,3,6]
+    end
+  end
+
+  # context "#select_random_location" do
+  #   before do
+  #       ai.piece = 'X'
+  #       board.board_spaces = { 
+  #         1 => " ",2 => " ",3 => " ",
+  #         4 => "O",5 => "X",6 => " ",
+  #         7 => "X",8 => "O",9 => "O"
+  #       }  
+  #   end
+
+  #   it "it returns a randomly selected value from find_all_empty_spaces" do
+  #     expect(ai.find_all_empty_spaces).to be == 1 || 2 || 3 ||6
+  #   end
+  # end
+end
 
 
 describe "TicTacToe" do
@@ -50,154 +391,32 @@ describe "TicTacToe" do
     end
   end
 
-  # context "#initiate_first_player_move (when X is selected by user)" do
-  #   before do
-  #     user = User.new
-  #     user.piece = 'X'
-  #   end
-
-  #   it "runs #user_turn" do
-  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.user_turn)
-  #   end
-  # end
-
-  # context "#initiate_first_player_move (when O is selected by user)" do
-  #   before do
-  #     user = User.new
-  #     user.piece = 'O'
-  #   end
-
-  #   it "runs #user_turn" do
-  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.cpu_turn)
-  #   end
-  # end
-
-#   context "#border" do
-#     it "prints out a border made up of asterisks" do
-#       output = tic_tac_toe.border
-#       output.should == "*************************************************************************"
-#       # expect(tic_tac_toe.border).to be == "*************************************************************************"
-#     end
-#   end
-end
-
-# it "should say 'Hello from Rspec' when run" do        
-#   output = `ruby sayhello.rb`
-#   output.should == 'Hello from RSpec'   
-# end
-
-
-# describe "sayhello.rb" do
-#   it "should say 'Hello from Rspec' when ran" do        
-#     STDOUT.should_receive(:puts).with('Hello from RSpec')
-#     require_relative 'sayhello.rb' #load/run the file 
-#   end
-# end
-
-describe "Board" do
-  let(:board) { Board.new }
-  context "#board_spaces" do
-    it "returns a hash representing the state of the board" do
-       expect(board.board_spaces).to be == { 
+  context "#board_spaces_left" do
+    before do
+        tic_tac_toe.board.board_spaces = { 
           1 => " ",2 => " ",3 => " ",
-          4 => " ",5 => " ",6 => " ",
-          7 => " ",8 => " ",9 => " "
-       }
+          4 => "O",5 => "X",6 => " ",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
+
+    it "it returns the number of empty spaces left on the board" do
+      expect(tic_tac_toe.board_spaces_left).to be == 4
     end
   end
+   context "#board_spaces_left" do
+    before do
+        tic_tac_toe.board.board_spaces = { 
+          1 => "X",2 => "O",3 => "O",
+          4 => "O",5 => "X",6 => "X",
+          7 => "X",8 => "O",9 => "O"
+        }  
+    end
 
-  context "#potential_victory_scenarios" do
-    it "returns a nested array of victory_scenario arrays" do
-      expect(board.potential_victory_scenarios).to be ==
-        [ 
-          [1,2,3], 
-          [4,5,6], 
-          [7,8,9],
-          [1,4,7],
-          [2,5,8],
-          [3,6,9],
-          [1,5,9], 
-          [3,5,7]
-        ]
+    it "it returns the number of empty spaces left on the board" do
+      expect(tic_tac_toe.board_spaces_left).to be == 0
     end
   end
 end
-
 
  
-
-
-#########################################################
-
-
-# require "spec_helper"
-
-# describe LongUrl do
-#   context "when generating long urls" do
-#     context "#generate_long_url" do
-#       it "generates long urls with 2000 characters" do
-#         long_url = LongUrl.new
-#         expect(long_url.generate_long_url).to have(2000).characters
-#       end
-#     end
-    
-#     it "sets generated long url when saving" do
-#       long_url = LongUrl.new
-#       long_url.stub(:generate_long_url => "ryan is awesome")
-#       long_url.save
-#       expect(long_url.long_url).to eq("ryan is awesome")
-#     end
-#   end
-# end
-
-describe "AI" do
-  let(:board) { Board.new }
-  let(:user)  { User.new }
-  let(:ai)   { AI.new(board, user) }
-  
-  context "#scenario_spaces_analysis(scenario)" do
-    before do
-        board.board_spaces = { 
-          1 => "X",2 => " ",3 => " ",
-          4 => " ",5 => "O",6 => " ",
-          7 => " ",8 => " ",9 => "X"
-        }  
-    end
-
-    it "returns the board state associated with a particular victory scenario" do
-      expect(ai.scenario_spaces_analysis([1,5,9])).to be == ['X', 'O', 'X']
-    end
-  end
-
-  context "#piece_count_for_scenario(scenario, player_piece) - not occupied by opponent " do
-    before do
-        board.board_spaces = { 
-          1 => "X",2 => " ",3 => " ",
-          4 => " ",5 => " ",6 => " ",
-          7 => " ",8 => " ",9 => "X"
-        }  
-    end
-
-    it "it returns the current players piece count when the scenario is not occupied by opponent" do
-      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 2
-    end
-  end
-
-  context "#piece_count_for_scenario(scenario, player_piece) - occupied by opponent " do
-    before do
-        board.board_spaces = { 
-          1 => "X",2 => " ",3 => " ",
-          4 => " ",5 => "O",6 => " ",
-          7 => " ",8 => " ",9 => "X"
-        }  
-    end
-
-    it "it returns 0 when the scenario is occupied by opponent" do
-      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 0
-    end
-  end
-end
-
- # def find_empty_spaces_in_victory_scenario(victory_scenario)
- #    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
- #  end
