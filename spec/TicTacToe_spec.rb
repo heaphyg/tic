@@ -45,7 +45,7 @@ describe "TicTacToe" do
   end
 
   context "#get_cpu_piece" do
-    it "assigns the opposing piece to the cpu based on the user's selection" do
+    it "assigns the opposing piece to the A.I based on the user's selection" do
       expect(tic_tac_toe.get_cpu_piece('X')).to eq('O')
     end
   end
@@ -150,10 +150,10 @@ end
 #   end
 # end
 
-describe "CPU" do
+describe "AI" do
   let(:board) { Board.new }
   let(:user)  { User.new }
-  let(:cpu)   { CPU.new(board, user) }
+  let(:ai)   { AI.new(board, user) }
   
   context "#scenario_spaces_analysis(scenario)" do
     before do
@@ -165,7 +165,7 @@ describe "CPU" do
     end
 
     it "returns the board state associated with a particular victory scenario" do
-      expect(cpu.scenario_spaces_analysis([1,5,9])).to be == ['X', 'O', 'X']
+      expect(ai.scenario_spaces_analysis([1,5,9])).to be == ['X', 'O', 'X']
     end
   end
 
@@ -179,7 +179,7 @@ describe "CPU" do
     end
 
     it "it returns the current players piece count when the scenario is not occupied by opponent" do
-      expect(cpu.piece_count_for_scenario([1,5,9], "X")).to be == 2
+      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 2
     end
   end
 
@@ -193,7 +193,7 @@ describe "CPU" do
     end
 
     it "it returns 0 when the scenario is occupied by opponent" do
-      expect(cpu.piece_count_for_scenario([1,5,9], "X")).to be == 0
+      expect(ai.piece_count_for_scenario([1,5,9], "X")).to be == 0
     end
   end
 end

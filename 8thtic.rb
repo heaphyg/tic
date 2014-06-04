@@ -2,7 +2,7 @@ class Player
   attr_accessor :piece, :name 
 end
 
-class CPU < Player
+class AI < Player
   attr_reader :board, :user
   def initialize(board, user)
     @name = "Mr. Computer"
@@ -117,7 +117,7 @@ class TicTacToe
   def initialize
     @user = User.new
     @board = Board.new
-    @cpu = CPU.new(@board, @user)
+    @ai = AI.new(@board, @user)
   end
 
   # collects input and provides output
@@ -133,7 +133,7 @@ class TicTacToe
       border
       puts "#{user.name} you have chosen to go second. Bold move. Please select the number of the space you wish to occupy."
     end
-    cpu.piece = get_cpu_piece(user.piece)
+    ai.piece = get_cpu_piece(user.piece)
     initiate_first_player_move
     print_board
   end
@@ -157,7 +157,7 @@ class TicTacToe
   end
  
   def initiate_first_player_move
-    user.piece == 'X' ? user_turn : cpu_turn    # add CPU.cpu_turn  and also put user turn inside the user
+    user.piece == 'X' ? user_turn : cpu_turn  
   end
 
   def border
@@ -176,8 +176,8 @@ class TicTacToe
   end
 
   def cpu_turn
-    move = cpu.cpu_find_move
-    board.board_spaces[move] = cpu.piece
+    move = ai.cpu_find_move
+    board.board_spaces[move] = ai.piece
     check_game(user.piece) # this is a tictactoe class thing
   end
 
@@ -188,7 +188,7 @@ class TicTacToe
       input = input.to_i
       if board.board_spaces[input] == " "
         board.board_spaces[input] = user.piece
-        check_game(cpu.piece)
+        check_game(ai.piece)
       else
         wrong_move
       end
@@ -210,12 +210,12 @@ class TicTacToe
   def check_game(next_turn)
     game_over = nil
     board.potential_victory_scenarios.each do |scenario|
-      if cpu.piece_count_for_scenario(scenario, cpu.piece) == 3  
+      if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
         border
-        puts "!!!!!!!!!!!!!!#{cpu.name} WINS!!!!!!!!!!!!!!"
+        puts "!!!!!!!!!!!!!!#{ai.name} WINS!!!!!!!!!!!!!!"
         game_over = true
       end
-      if cpu.piece_count_for_scenario(scenario, user.piece) == 3 
+      if ai.piece_count_for_scenario(scenario, user.piece) == 3 
         border
         puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
         game_over = true
@@ -224,9 +224,9 @@ class TicTacToe
     unless game_over
       if(board_spaces_left > 0)
         if(next_turn == user.piece)
-          user_turn   # user.user_turn
+          user_turn 
         else
-          cpu_turn    ### Add CPU.cpu_turn
+          cpu_turn   
         end
       else
         border
@@ -245,7 +245,7 @@ class TicTacToe
 
   # private
 
-  attr_reader :cpu
+  attr_reader :ai
   attr_accessor :user,:board
 end
 
