@@ -179,6 +179,9 @@ class TicTacToe
     check_game(user.piece)
   end
 
+  def user_selection
+  end
+
   def user_turn
     print_board
     input = gets.chomp
@@ -206,7 +209,6 @@ class TicTacToe
   end
 
   def game_over?
-    # game_over = nil
     board.potential_victory_scenarios.each do |scenario|
       if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
         border

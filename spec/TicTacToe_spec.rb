@@ -389,7 +389,8 @@ describe "TicTacToe" do
       expect(tic_tac_toe.board_spaces_left).to be == 4
     end
   end
-   context "#board_spaces_left" do
+
+  context "#board_spaces_left" do
     before do
         tic_tac_toe.board.board_spaces = { 
           1 => "X",2 => "O",3 => "O",
@@ -403,53 +404,52 @@ describe "TicTacToe" do
     end
   end
 
-  context "check_game" do
-     let(:board) { Board.new }
-     let(:user)  { User.new }
-     let(:ai)    { AI.new(board, user) }
+  context "#game_over - A.I wins" do
     before do
-        tic_tac_toe.ai.piece = 'X'
+        tic_tac_toe.ai.piece = "X"
+        tic_tac_toe.user.piece = "O"
         tic_tac_toe.board.board_spaces = { 
-          1 => "X",2 => "X",3 => "X",
+          1 => "X",2 => "O",3 => "X",
           4 => "O",5 => "X",6 => "X",
           7 => "X",8 => "O",9 => "O"
         }  
     end
 
-    it "it sets game_over to true when 3 X's in a victory scenario (A.I wins)" do
-      expect(tic_tac_toe.check_game).to be == game_over
+    it "should return true when the A.I wins" do
+      expect(tic_tac_toe.game_over?).to be == true
+    end
+  end
+
+  context "#game_over - User wins" do
+    before do
+        tic_tac_toe.user.piece = "O"
+        tic_tac_toe.ai.piece = "X"
+        tic_tac_toe.board.board_spaces = { 
+          1 => "O",2 => "O",3 => "O",
+          4 => "O",5 => "X",6 => "X",
+          7 => "X",8 => "O",9 => "X"
+        }  
     end
 
+    it "should return true when the user wins" do
+      expect(tic_tac_toe.game_over?).to be == true
+    end
+  end
+
+   context "#game_over - no winner" do
+    before do
+        tic_tac_toe.user.piece = "O"
+        tic_tac_toe.ai.piece = "X"
+        tic_tac_toe.board.board_spaces = { 
+          1 => "X",2 => "X",3 => "O",
+          4 => "O",5 => "O",6 => "X",
+          7 => "X",8 => "X",9 => "O"
+        }  
+    end
+
+    it "should return false when there is no winner" do
+      expect(tic_tac_toe.game_over?).to be == false
+    end
   end
 end
 
-
-
-  # def check_game(next_turn)
-  #   game_over = nil
-  #   board.potential_victory_scenarios.each do |scenario|
-  #     if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
-  #       border
-  #       puts "!!!!!!!!!!!!!!#{ai.name} WINS!!!!!!!!!!!!!!"
-  #       game_over = true
-  #     end
-  #     if ai.piece_count_for_scenario(scenario, user.piece) == 3 
-  #       border
-  #       puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
-  #       game_over = true
-  #     end
-  #   end
-  #   unless game_over
-  #     if(board_spaces_left > 0)
-  #       if(next_turn == user.piece)
-  #         user_turn 
-  #       else
-  #         cpu_turn   
-  #       end
-  #     else
-  #       border
-  #       puts "!!!!!!!!!!!!!!CAT'S GAME!!!!!!!!!!!!!!"
-  #     end
-  #   end
-  # end
- 
