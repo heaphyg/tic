@@ -163,14 +163,41 @@ describe "CPU" do
           7 => " ",8 => " ",9 => "X"
         }  
     end
+
     it "returns the board state associated with a particular victory scenario" do
       expect(cpu.scenario_spaces_analysis([1,5,9])).to be == ['X', 'O', 'X']
     end
   end
+
+  context "#piece_count_for_scenario(scenario, player_piece) - not occupied by opponent " do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => " ",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "it returns the current players piece count when the scenario is not occupied by opponent" do
+      expect(cpu.piece_count_for_scenario([1,5,9], "X")).to be == 2
+    end
+  end
+
+  context "#piece_count_for_scenario(scenario, player_piece) - occupied by opponent " do
+    before do
+        board.board_spaces = { 
+          1 => "X",2 => " ",3 => " ",
+          4 => " ",5 => "O",6 => " ",
+          7 => " ",8 => " ",9 => "X"
+        }  
+    end
+
+    it "it returns 0 when the scenario is occupied by opponent" do
+      expect(cpu.piece_count_for_scenario([1,5,9], "X")).to be == 0
+    end
+  end
 end
 
-
-# def scenario_spaces_analysis(scenario) 
-
-#     scenario.map {|scenario_position| board.board_spaces[scenario_position]}
-#   end
+ # def find_empty_spaces_in_victory_scenario(victory_scenario)
+ #    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
+ #  end
