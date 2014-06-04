@@ -1,4 +1,4 @@
-## to run tests gem install rspec-expectations
+## to run tests run: gem install rspec-expectations
 
 class Player
   attr_accessor :piece, :name 

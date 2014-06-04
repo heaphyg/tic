@@ -1,38 +1,6 @@
-## to run tests gem install rspec-expectations
-
+## to run tests run: gem install rspec-expectations
 require_relative 'spec_helper'
 require 'stringio'
-
-
-  # context "#initiate_first_player_move (when X is selected by user)" do
-  #   before do
-  #     user = User.new
-  #     user.piece = 'X'
-  #   end
-
-  #   it "runs #user_turn" do
-  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.user_turn)
-  #   end
-  # end
-
-  # context "#initiate_first_player_move (when O is selected by user)" do
-  #   before do
-  #     user = User.new
-  #     user.piece = 'O'
-  #   end
-
-  #   it "runs #user_turn" do
-  #      expect(tic_tac_toe.initiate_first_player_move).to eq(tic_tac_toe.cpu_turn)
-  #   end
-  # end
-
-
-
-
-
-
-
-
 
 describe "Board" do
   let(:board) { Board.new }
@@ -436,7 +404,7 @@ describe "TicTacToe" do
     end
   end
 
-   context "#game_over - no winner" do
+  context "#game_over - no winner" do
     before do
         tic_tac_toe.user.piece = "O"
         tic_tac_toe.ai.piece = "X"
