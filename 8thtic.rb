@@ -85,11 +85,7 @@ class CPU < Player
 
 end
 
-
 class User < Player
-  def initialize
-    super
-  end
 end
 
 
@@ -143,7 +139,7 @@ class TicTacToe
   end
 
   def get_user_name
-    return gets.chomp.capitalize
+    return gets.chomp.split(" ").map { |word| word.capitalize }.join(" ")
   end
 
   
@@ -208,7 +204,7 @@ class TicTacToe
 
   def incorrect_input
     puts "Please specify a move with an integer 1..9"
-    user_turn   # put useer.user_turn
+    user_turn  
   end
 
   def check_game(next_turn)
@@ -247,7 +243,7 @@ class TicTacToe
     spaces_left
   end
 
-  private
+  # private
 
   attr_reader :cpu
   attr_accessor :user,:board
