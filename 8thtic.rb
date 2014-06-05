@@ -180,9 +180,6 @@ class TicTacToe
     check_game(user.piece)
   end
 
-  def user_selection
-  end
-
   def user_turn
     print_board
     input = gets.chomp
@@ -213,12 +210,12 @@ class TicTacToe
     board.potential_victory_scenarios.each do |scenario|
       if ai.piece_count_for_scenario(scenario, ai.piece) == 3  
         border
-        puts "!!!!!!!!!!!!!!#{ai.name} WINS!!!!!!!!!!!!!!"
+        puts "             !!!!!!!!!!!!!! #{ai.name} WINS !!!!!!!!!!!!!!"
         return true
       end
       if ai.piece_count_for_scenario(scenario, user.piece) == 3 
         border
-        puts "!!!!!!!!!!!!!!#{user.name} WINS!!!!!!!!!!!!!!"
+        puts "                 !!!!!!!!!!!!!! #{user.name} WINS !!!!!!!!!!!!!!"
         return true
       end
     end
@@ -235,7 +232,7 @@ class TicTacToe
         end
       else
         border
-        puts "!!!!!!!!!!!!!!CAT'S GAME!!!!!!!!!!!!!!"
+        puts "                 !!!!!!!!!!!!!! CAT'S GAME !!!!!!!!!!!!!!"
       end
     end
   end
