@@ -143,6 +143,7 @@ class TicTacToe
   
   def get_user_piece
     selection = nil
+    border
     until ['X','O'].include?(selection)
       puts "#{user.name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
       selection = gets.chomp.upcase
