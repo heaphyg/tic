@@ -36,20 +36,27 @@ class AI < Player
   end
 
   def seek_victory
-    puts "seek victory"
     calculate_move(self.piece, 2)
   end
 
   def block_victory
-    puts "block victory"
     calculate_move(user.piece, 2)
   end
 
-  def middle_tactic
-    puts "middle tactic"
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
+  def corner_scenario  #####
+    return [1,3,7,9]
+  end
+
+  def corner_spaces  ######
     corner_spaces = scenario_spaces_analysis(corner_scenario)
+    return corner_spaces
+  end
+
+  def middle_space  ######
+    return board.board_spaces[5]
+  end
+
+  def middle_tactic
     if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
       return 5
     end
@@ -57,10 +64,6 @@ class AI < Player
   end
 
   def corner_tactic
-    puts "corner tactic"
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
-    corner_spaces = scenario_spaces_analysis(corner_scenario)
     if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
       return corner_scenario.sample
     end
@@ -68,31 +71,25 @@ class AI < Player
   end
 
   def build_up_a_victory_scenario
-    puts "build up"
     calculate_move(self.piece, 1)
   end
 
   def find_all_empty_spaces
-    puts "returning empty space"
     board.board_spaces.select { |k, v| v == " "}.keys
   end
 
   def return_empty_corner
-    puts "return empty corner"
-    corner_scenario = [1,3,7,9]
+    # corner_scenario = [1,3,7,9]  ######
     empty_corners = []
     corner_scenario.each do |space|
       if board.board_spaces[space] == " "
          empty_corners << space
       end
     end
-    puts "empty corner:"
-    puts empty_corners
     return empty_corners.sample
   end
 
   def select_random_corner
-    puts "select random"
     if return_empty_corner 
       return_empty_corner
     else
@@ -206,7 +203,6 @@ class TicTacToe
   end
 
   def user_turn
-    puts "making user turn"
     print_board
     input = gets.chomp
     if (1..9).include?(input.to_i)
