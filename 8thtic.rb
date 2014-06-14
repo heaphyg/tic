@@ -202,17 +202,21 @@ class TicTacToe
     check_game(user.piece)
   end
 
+  def respond_to_user_selection(input)
+    if board.board_spaces[input] == " "
+      board.board_spaces[input] = user.piece
+      check_game(ai.piece)
+    else
+      wrong_move
+    end
+  end
+
   def user_turn
     print_board
     input = gets.chomp
     if (1..9).include?(input.to_i)
       input = input.to_i
-      if board.board_spaces[input] == " "
-        board.board_spaces[input] = user.piece
-        check_game(ai.piece)
-      else
-        wrong_move
-      end
+      respond_to_user_selection(input)
     else
       incorrect_input
     end
