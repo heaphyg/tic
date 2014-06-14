@@ -36,14 +36,17 @@ class AI < Player
   end
 
   def seek_victory
+    puts "seek victory"
     calculate_move(self.piece, 2)
   end
 
   def block_victory
+    puts "block victory"
     calculate_move(user.piece, 2)
   end
 
   def middle_tactic
+    puts "middle tactic"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -54,6 +57,7 @@ class AI < Player
   end
 
   def corner_tactic
+    puts "corner tactic"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -64,19 +68,40 @@ class AI < Player
   end
 
   def build_up_a_victory_scenario
+    puts "build up"
     calculate_move(self.piece, 1)
   end
 
-  def find_all_empty_spaces
-    board.board_spaces.select { |k, v| v == " "}.keys
+  # def find_all_empty_spaces
+  #   board.board_spaces.select { |k, v| v == " "}.keys
+  # end
+
+  def return_empty_corner
+    corner_scenario = [1,3,7,9]
+    empty_corners = []
+    corner_scenario.each do |space|
+      if board.board_spaces[space] == " "
+         empty_corners << space
+      end
+    end
+    return empty_corners
+     # find if any of the corner spaces are empty 
+     # if so return a random empty corner space
+
   end
 
-  def select_random_location
-    find_all_empty_spaces.sample
+  def select_random_corner
+    # puts "select random"
+    # find_all_empty_spaces.sample
+    if return_empty_corner
+      return_empty_corner.sample
+    else
+      find_all_empty_spaces.sample
+    end
   end
 
   def find_move
-    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_location
+    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_corner
   end
 
 end
@@ -181,6 +206,7 @@ class TicTacToe
   end
 
   def user_turn
+    puts "making user turn"
     print_board
     input = gets.chomp
     if (1..9).include?(input.to_i)
