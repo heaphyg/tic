@@ -248,14 +248,18 @@ class TicTacToe
     return false
   end
 
+  def continue_gameplay(next_turn)
+    if(next_turn == user.piece)
+      user_turn 
+    else
+      cpu_turn   
+    end
+  end
+
   def check_game(next_turn)
     unless game_over?
       if(board_spaces_left > 0)
-        if(next_turn == user.piece)
-          user_turn 
-        else
-          cpu_turn   
-        end
+        continue_gameplay(next_turn)
       else
         border
         puts "                 !!!!!!!!!!!!!! CAT'S GAME !!!!!!!!!!!!!!"
