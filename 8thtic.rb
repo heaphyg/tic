@@ -72,11 +72,13 @@ class AI < Player
     calculate_move(self.piece, 1)
   end
 
-  # def find_all_empty_spaces
-  #   board.board_spaces.select { |k, v| v == " "}.keys
-  # end
+  def find_all_empty_spaces
+    puts "returning empty space"
+    board.board_spaces.select { |k, v| v == " "}.keys
+  end
 
   def return_empty_corner
+    puts "return empty corner"
     corner_scenario = [1,3,7,9]
     empty_corners = []
     corner_scenario.each do |space|
@@ -84,17 +86,15 @@ class AI < Player
          empty_corners << space
       end
     end
-    return empty_corners
-     # find if any of the corner spaces are empty 
-     # if so return a random empty corner space
-
+    puts "empty corner:"
+    puts empty_corners
+    return empty_corners.sample
   end
 
   def select_random_corner
-    # puts "select random"
-    # find_all_empty_spaces.sample
-    if return_empty_corner
-      return_empty_corner.sample
+    puts "select random"
+    if return_empty_corner 
+      return_empty_corner
     else
       find_all_empty_spaces.sample
     end
