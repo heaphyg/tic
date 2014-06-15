@@ -2,7 +2,8 @@ Tic Tac Toe for 8thlight
 
 langauge: Ruby
 
-to run tests:  ruby lib/tic_tac_toe.rb
+
+to run game:  ruby lib/tic_tac_toe.rb
 
 to execute all tests - run: rspec
 
