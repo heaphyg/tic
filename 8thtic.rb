@@ -43,16 +43,16 @@ class AI < Player
     calculate_move(user.piece, 2)
   end
 
-  def corner_scenario  #####
+  def corner_scenario 
     return [1,3,7,9]
   end
 
-  def corner_spaces  ######
+  def corner_spaces 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
     return corner_spaces
   end
 
-  def middle_space  ######
+  def middle_space 
     return board.board_spaces[5]
   end
 
@@ -70,7 +70,40 @@ class AI < Player
     false
   end
 
-  def build_up_a_victory_scenario
+  def diagonal_one_scenario
+    return [1,5,9]
+  end
+
+  def diagonal_two_scenario
+    return [3,5,7]
+  end
+
+  def opposing_corners_scenario_one
+    return [7, 3]
+  end
+
+  def opposing_corners_scenario_two
+    return [1, 9]
+  end
+
+  def empty_opposing_corner
+    if scenario_spaces_analysis(opposing_corners_scenario_one).all? { |space| space == ' ' }
+      return opposing_corners_scenario_one.sample
+    elsif scenario_spaces_analysis(opposing_corners_scenario_two).all? { |space| space == ' ' }
+      return opposing_corners_scenario_two.sample
+    end
+  end
+
+  def diagnal_defense
+    puts "diagonal DEF"
+    if scenario_spaces_analysis(diagonal_one_scenario).all? { |space| space != ' '} && empty_opposing_corner
+      return empty_opposing_corner
+    elsif scenario_spaces_analysis(diagonal_two_scenario).all? { |space| space != ' '} && empty_opposing_corner
+      return empty_opposing_corner
+    end
+  end
+
+  def build_up_a_victory_scenario ### this might include a new mwthod call for corners
     calculate_move(self.piece, 1)
   end
 
@@ -79,7 +112,6 @@ class AI < Player
   end
 
   def return_empty_corner
-    # corner_scenario = [1,3,7,9]  ######
     empty_corners = []
     corner_scenario.each do |space|
       if board.board_spaces[space] == " "
@@ -98,7 +130,7 @@ class AI < Player
   end
 
   def find_move
-    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_corner
+    seek_victory ||  block_victory || middle_tactic || corner_tactic || diagnal_defense || build_up_a_victory_scenario || select_random_corner
   end
 
 end
@@ -158,8 +190,12 @@ class TicTacToe
     print_board
   end
 
+  def input
+    return gets.chomp
+  end
+
   def get_user_name
-    return gets.chomp.split(" ").map { |word| word.capitalize }.join(" ")
+    return input.chomp.split(" ").map { |word| word.capitalize }.join(" ")
   end
 
   
@@ -168,7 +204,7 @@ class TicTacToe
     border
     until ['X','O'].include?(selection)
       puts "#{user.name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
-      selection = gets.chomp.upcase
+      selection = input.upcase
     end
     selection
   end
@@ -202,21 +238,21 @@ class TicTacToe
     check_game(user.piece)
   end
 
-  def respond_to_user_selection(input)
-    if board.board_spaces[input] == " "
-      board.board_spaces[input] = user.piece
+  def respond_to_user_selection(selection)
+    if board.board_spaces[selection] == " "
+      board.board_spaces[selection] = user.piece
       check_game(ai.piece)
     else
       wrong_move
-    end
+    end 
   end
 
   def user_turn
     print_board
-    input = gets.chomp
-    if (1..9).include?(input.to_i)
-      input = input.to_i
-      respond_to_user_selection(input)
+    selection = input
+    if (1..9).include?(selection.to_i)
+      selection = selection.to_i
+      respond_to_user_selection(selection)
     else
       incorrect_input
     end
