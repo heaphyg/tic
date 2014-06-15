@@ -57,6 +57,7 @@ class AI < Player
   end
 
   def middle_tactic
+    puts "middle_tactic"
     if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
       return 5
     end
@@ -64,6 +65,7 @@ class AI < Player
   end
 
   def corner_tactic
+    puts "corner tactic"
     if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
       return corner_scenario.sample
     end
@@ -102,9 +104,22 @@ class AI < Player
     if empty_corners(corner_scenario).length == 2
       return empty_corners(corner_scenario).sample
     end
+    false
+  end
+
+  def middle_sides
+    return [2,4,6,8]
+  end
+
+  def middle_defense
+    puts "middle defense"
+    if middle_sides.any? { |space| board.board_spaces[space] != " "} && (middle_space == " ")
+      return 5
+    end
+    false
   end
 
   def find_move
-    seek_victory ||  block_victory || middle_tactic || corner_tactic || diagnal_defense || build_up_a_victory_scenario || start_in_corner || select_random_location
+    seek_victory || block_victory || middle_tactic || corner_tactic || middle_defense || diagnal_defense || build_up_a_victory_scenario || start_in_corner || select_random_location
   end
 end
