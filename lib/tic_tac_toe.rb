@@ -1,113 +1,6 @@
-## to run tests run: gem install rspec-expectations
-
-class Player
-  attr_accessor :piece, :name 
-end
-
-class AI < Player
-  attr_reader :board, :user
-  def initialize(board, user)
-    @name = "Mr. Computer"
-    @board = board
-    @user = user
-  end
-
-  def scenario_spaces_analysis(scenario) 
-    scenario.map {|scenario_position| board.board_spaces[scenario_position]}
-  end
-
-  def piece_count_for_scenario(scenario, player_piece)
-    spaces = scenario_spaces_analysis(scenario)
-    return 0 if spaces.any? {|space| space != player_piece && space != ' '}
-    spaces.select{|space| space == player_piece}.length
-  end
-
-  def find_empty_spaces_in_victory_scenario(victory_scenario)
-    victory_scenario.select {|space| board.board_spaces[space] == " "}.sample
-  end
-
-  def calculate_move(piece_to_be_counted, num_of_occurances)
-    board.potential_victory_scenarios.each do |scenario|
-      if piece_count_for_scenario(scenario, piece_to_be_counted) == num_of_occurances
-        return find_empty_spaces_in_victory_scenario(scenario)
-      end 
-    end
-    false
-  end
-
-  def seek_victory
-    calculate_move(self.piece, 2)
-  end
-
-  def block_victory
-    calculate_move(user.piece, 2)
-  end
-
-  def middle_tactic
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
-    corner_spaces = scenario_spaces_analysis(corner_scenario)
-    if corner_spaces.any? {|space| space != ' '} && (middle_space == " ")
-      return 5
-    end
-    false
-  end
-
-  def corner_tactic
-    corner_scenario = [1,3,7,9]
-    middle_space = board.board_spaces[5] 
-    corner_spaces = scenario_spaces_analysis(corner_scenario)
-    if corner_spaces.all? {|space| space == ' '} && (middle_space != " ")
-      return corner_scenario.sample
-    end
-    false
-  end
-
-  def build_up_a_victory_scenario
-    calculate_move(self.piece, 1)
-  end
-
-  def find_all_empty_spaces
-    board.board_spaces.select { |k, v| v == " "}.keys
-  end
-
-  def select_random_location
-    find_all_empty_spaces.sample
-  end
-
-  def find_move
-    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_location
-  end
-
-end
-
-class User < Player
-end
-
-
-class Board
-  attr_reader :potential_victory_scenarios
-  attr_accessor :board_spaces 
-  def initialize
-     @board_spaces = { 
-      1 => " ",2 => " ",3 => " ",
-      4 => " ",5 => " ",6 => " ",
-      7 => " ",8 => " ",9 => " "
-    }
-
-    @potential_victory_scenarios = [
-      [1,2,3], # 3 potential horizontal victories
-      [4,5,6], 
-      [7,8,9],
-      [1,4,7], # 3 potential vertical victories
-      [2,5,8],
-      [3,6,9],
-      [1,5,9], # 2 potential diagonal victories
-      [3,5,7]
-    ]
-  end
-end
-
+require_relative 'ai'
+require_relative 'user'
+require_relative 'board'
 
 class TicTacToe
   attr_reader :ai
@@ -136,8 +29,12 @@ class TicTacToe
     print_board
   end
 
+  def input
+    return gets.chomp
+  end
+
   def get_user_name
-    return gets.chomp.split(" ").map { |word| word.capitalize }.join(" ")
+    return input.chomp.split(" ").map { |word| word.capitalize }.join(" ")
   end
 
   
@@ -146,7 +43,7 @@ class TicTacToe
     border
     until ['X','O'].include?(selection)
       puts "#{user.name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
-      selection = gets.chomp.upcase
+      selection = input.upcase
     end
     selection
   end
@@ -180,17 +77,21 @@ class TicTacToe
     check_game(user.piece)
   end
 
+  def respond_to_user_selection(selection)
+    if board.board_spaces[selection] == " "
+      board.board_spaces[selection] = user.piece
+      check_game(ai.piece)
+    else
+      wrong_move
+    end 
+  end
+
   def user_turn
     print_board
-    input = gets.chomp
-    if (1..9).include?(input.to_i)
-      input = input.to_i
-      if board.board_spaces[input] == " "
-        board.board_spaces[input] = user.piece
-        check_game(ai.piece)
-      else
-        wrong_move
-      end
+    selection = input
+    if (1..9).include?(selection.to_i)
+      selection = selection.to_i
+      respond_to_user_selection(selection)
     else
       incorrect_input
     end
@@ -222,14 +123,18 @@ class TicTacToe
     return false
   end
 
+  def continue_gameplay(next_turn)
+    if(next_turn == user.piece)
+      user_turn 
+    else
+      cpu_turn   
+    end
+  end
+
   def check_game(next_turn)
     unless game_over?
       if(board_spaces_left > 0)
-        if(next_turn == user.piece)
-          user_turn 
-        else
-          cpu_turn   
-        end
+        continue_gameplay(next_turn)
       else
         border
         puts "                 !!!!!!!!!!!!!! CAT'S GAME !!!!!!!!!!!!!!"
