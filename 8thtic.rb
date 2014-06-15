@@ -76,28 +76,33 @@ class AI < Player
     return [3,5,7]
   end
 
-  def opposing_corners_scenario_one
-    return [7, 3]
+  def middle_side
+    return [2,4,6,8]
   end
 
-  def opposing_corners_scenario_two
-    return [1, 9]
-  end
+  # def opposing_corners_scenario_one
+  #   return [7, 3]
+  # end
 
-  def empty_opposing_corner
-    if scenario_spaces_analysis(opposing_corners_scenario_one).all? { |space| space == ' ' }
-      return opposing_corners_scenario_one.sample
-    elsif scenario_spaces_analysis(opposing_corners_scenario_two).all? { |space| space == ' ' }
-      return opposing_corners_scenario_two.sample
+  # def opposing_corners_scenario_two
+  #   return [1, 9]
+  # end
+
+  def empty_middle_side
+    if scenario_spaces_analysis(middle_side).all? { |space| space == ' ' }
+      return middle_side.sample
     end
+    # elsif scenario_spaces_analysis(opposing_corners_scenario_two).all? { |space| space == ' ' }
+    #   return middle_side.sample
+    # end
   end
 
   def diagnal_defense
     puts "diagonal DEF"
-    if scenario_spaces_analysis(diagonal_one_scenario).all? { |space| space != ' '} && empty_opposing_corner
-      return empty_opposing_corner
-    elsif scenario_spaces_analysis(diagonal_two_scenario).all? { |space| space != ' '} && empty_opposing_corner
-      return empty_opposing_corner
+    if scenario_spaces_analysis(diagonal_one_scenario).all? { |space| space != ' '} && empty_middle_side
+      return empty_middle_side
+    elsif scenario_spaces_analysis(diagonal_two_scenario).all? { |space| space != ' '} && empty_middle_side
+      return empty_middle_side
     end
   end
 
