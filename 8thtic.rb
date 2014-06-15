@@ -36,14 +36,17 @@ class AI < Player
   end
 
   def seek_victory
+    "seek victory"
     calculate_move(self.piece, 2)
   end
 
   def block_victory
+    "block victory"
     calculate_move(user.piece, 2)
   end
 
   def middle_tactic
+    puts "middle tactic"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -54,6 +57,7 @@ class AI < Player
   end
 
   def corner_tactic
+    puts "corner_tactic"
     corner_scenario = [1,3,7,9]
     middle_space = board.board_spaces[5] 
     corner_spaces = scenario_spaces_analysis(corner_scenario)
@@ -64,6 +68,7 @@ class AI < Player
   end
 
   def build_up_a_victory_scenario
+    puts "build up"
     calculate_move(self.piece, 1)
   end
 
@@ -71,12 +76,44 @@ class AI < Player
     board.board_spaces.select { |k, v| v == " "}.keys
   end
 
+  def corner_scenario
+    return [1,3,7,9]
+  end
+
+  def empty_corners(corners)
+    corners.select {|space| board.board_spaces[space] == " "}
+  end
+
+  def start_in_corner
+    puts "corner start"
+    empty_corners(corner_scenario).sample
+  end
+
   def select_random_location
+    puts "select random"
     find_all_empty_spaces.sample
   end
 
+  # def diagonal_one_scenario
+  # end
+
+  # def diagonal_two_scenario
+  # end
+
+  def diagnal_defense
+    puts "diagonal DEF"
+    # if scenario_spaces_analysis(diagonal_one_scenario).all? { |space| space != ' '} && empty_corners.length == 2
+    #   return empty_corners.sample
+    # elsif scenario_spaces_analysis(diagonal_two_scenario).all? { |space| space != ' '} && empty_corners.length == 2
+    #   return empty_corners.sample
+    # end
+    if empty_corners(corner_scenario).length == 2
+      return empty_corners(corner_scenario).sample
+    end
+  end
+
   def find_move
-    seek_victory ||  block_victory || middle_tactic || corner_tactic || build_up_a_victory_scenario || select_random_location
+    seek_victory ||  block_victory || middle_tactic || corner_tactic || diagnal_defense || build_up_a_victory_scenario || start_in_corner || select_random_location
   end
 
 end
