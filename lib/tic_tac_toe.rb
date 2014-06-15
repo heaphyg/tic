@@ -29,8 +29,12 @@ class TicTacToe
     print_board
   end
 
+  def input
+    return gets.chomp
+  end
+
   def get_user_name
-    return gets.chomp.split(" ").map { |word| word.capitalize }.join(" ")
+    return input.chomp.split(" ").map { |word| word.capitalize }.join(" ")
   end
 
   
@@ -39,7 +43,7 @@ class TicTacToe
     border
     until ['X','O'].include?(selection)
       puts "#{user.name} please write an 'X' if you would like to go first or an 'O' if you would like to go second."
-      selection = gets.chomp.upcase
+      selection = input.upcase
     end
     selection
   end
@@ -73,17 +77,21 @@ class TicTacToe
     check_game(user.piece)
   end
 
+  def respond_to_user_selection(selection)
+    if board.board_spaces[selection] == " "
+      board.board_spaces[selection] = user.piece
+      check_game(ai.piece)
+    else
+      wrong_move
+    end 
+  end
+
   def user_turn
     print_board
-    input = gets.chomp
-    if (1..9).include?(input.to_i)
-      input = input.to_i
-      if board.board_spaces[input] == " "
-        board.board_spaces[input] = user.piece
-        check_game(ai.piece)
-      else
-        wrong_move
-      end
+    selection = input
+    if (1..9).include?(selection.to_i)
+      selection = selection.to_i
+      respond_to_user_selection(selection)
     else
       incorrect_input
     end
@@ -115,14 +123,18 @@ class TicTacToe
     return false
   end
 
+  def continue_gameplay(next_turn)
+    if(next_turn == user.piece)
+      user_turn 
+    else
+      cpu_turn   
+    end
+  end
+
   def check_game(next_turn)
     unless game_over?
       if(board_spaces_left > 0)
-        if(next_turn == user.piece)
-          user_turn 
-        else
-          cpu_turn   
-        end
+        continue_gameplay(next_turn)
       else
         border
         puts "                 !!!!!!!!!!!!!! CAT'S GAME !!!!!!!!!!!!!!"

@@ -1,5 +1,10 @@
 Tic Tac Toe for 8thlight
 
+langauge: Ruby
+
 to run tests:  ruby lib/tic_tac_toe.rb
 
 to execute tests - run: rspec
+
+GAMEPLAY: Fill in your name, choose a game piece and use the reference 
+board displayed to the right of the the gameplay board to plan your moves.
