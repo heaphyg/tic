@@ -1,5 +1,3 @@
-## to run tests run: gem install rspec-expectations
-
 class Player
   attr_accessor :piece, :name 
 end
@@ -132,7 +130,6 @@ class AI < Player
   def find_move
     seek_victory ||  block_victory || middle_tactic || corner_tactic || diagnal_defense || build_up_a_victory_scenario || select_random_corner
   end
-
 end
 
 class User < Player

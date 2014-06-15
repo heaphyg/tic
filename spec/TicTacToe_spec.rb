@@ -279,20 +279,20 @@ describe "AI" do
     end
   end
 
-  context "#select_random_location" do
-    before do
-        ai.piece = 'X'
-        board.board_spaces = { 
-          1 => " ",2 => " ",3 => " ",
-          4 => "O",5 => "X",6 => " ",
-          7 => "X",8 => "O",9 => "O"
-        }  
-    end
+  # context "#select_random_location" do
+  #   before do
+  #       ai.piece = 'X'
+  #       board.board_spaces = { 
+  #         1 => " ",2 => " ",3 => " ",
+  #         4 => "O",5 => "X",6 => " ",
+  #         7 => "X",8 => "O",9 => "O"
+  #       }  
+  #   end
 
-    it "it returns a randomly selected value from find_all_empty_spaces" do
-      [ai.select_random_location].should_not include(4,5,7,8,9)
-    end
-  end
+  #   it "it returns a randomly selected value from find_all_empty_spaces" do
+  #     [ai.select_random_location].should_not include(4,5,7,8,9)
+  #   end
+  # end
 end
 
 
