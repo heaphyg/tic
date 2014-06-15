@@ -115,7 +115,6 @@ class AI < Player
   def find_move
     seek_victory ||  block_victory || middle_tactic || corner_tactic || diagnal_defense || build_up_a_victory_scenario || start_in_corner || select_random_location
   end
-
 end
 
 class User < Player
