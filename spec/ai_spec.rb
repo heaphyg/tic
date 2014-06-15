@@ -340,17 +340,7 @@ describe "AI" do
       [ai.diagnal_defense].should_not include(1,2,3,4,5,6,7,8,9)
     end
   end
-
-
-
-
 end
 
 
 
- # def diagnal_defense
- #    puts "diagonal DEF"
- #    if empty_corners(corner_scenario).length == 2
- #      return empty_corners(corner_scenario).sample
- #    end
- #  end
