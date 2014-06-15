@@ -1,5 +1,5 @@
 Tic Tac Toe for 8thlight
 
-for tests - run: gem install rspec-expectations
+to run tests:  ruby lib/tic_tac_toe.rb
 
 to execute tests - run: rspec
